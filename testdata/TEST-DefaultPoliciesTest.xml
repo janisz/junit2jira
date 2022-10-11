@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="DefaultPoliciesTest" tests="15" skipped="6" failures="1" errors="0" timestamp="2022-09-30T21:35:15" hostname="merge-gke-postgres-qa-e2e-tests-stackrox-e2e" time="275.417">
+  <properties/>
+  <testcase name="Verify policy Secure Shell (ssh) Port Exposed is triggered" classname="DefaultPoliciesTest" time="0.161">
+    <system-out><![CDATA[?[1;30m21:35:15?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Starting testcase
+?[1;30m21:35:15?[0;39m | ?[34mINFO ?[0;39m | Services                  | violation size is: 1
+?[1;30m21:35:15?[0;39m | ?[34mINFO ?[0;39m | Services                  | Secure Shell (ssh) Port Exposed triggered after waiting 0 seconds
+?[1;30m21:35:15?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Ending testcase
+]]></system-out>
+  </testcase>
+  <testcase name="Verify policy Latest tag is triggered" classname="DefaultPoliciesTest" time="0.117">
+    <system-out><![CDATA[?[1;30m21:35:15?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Starting testcase
+?[1;30m21:35:15?[0;39m | ?[34mINFO ?[0;39m | Services                  | violation size is: 1
+?[1;30m21:35:15?[0;39m | ?[34mINFO ?[0;39m | Services                  | Latest tag triggered after waiting 0 seconds
+?[1;30m21:35:15?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Ending testcase
+]]></system-out>
+  </testcase>
+  <testcase name="Verify policy Environment Variable Contains Secret is triggered" classname="DefaultPoliciesTest" time="0.114">
+    <system-out><![CDATA[?[1;30m21:35:15?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Starting testcase
+?[1;30m21:35:15?[0;39m | ?[34mINFO ?[0;39m | Services                  | violation size is: 1
+?[1;30m21:35:15?[0;39m | ?[34mINFO ?[0;39m | Services                  | Environment Variable Contains Secret triggered after waiting 0 seconds
+?[1;30m21:35:15?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Ending testcase
+]]></system-out>
+  </testcase>
+  <testcase name="Verify policy Apache Struts: CVE-2017-5638 is triggered" classname="DefaultPoliciesTest" time="264.996">
+    <failure message="Condition not satisfied:&#10;&#10;waitForViolation(deploymentName,  policyName, 60)&#10;|                |                |&#10;false            qadefpolstruts   Apache Struts: CVE-2017-5638&#10;" type="org.spockframework.runtime.ConditionNotSatisfiedError">Condition not satisfied:
+
+waitForViolation(deploymentName,  policyName, 60)
+|                |                |
+false            qadefpolstruts   Apache Struts: CVE-2017-5638
+
+	at DefaultPoliciesTest.Verify policy #policyName is triggered(DefaultPoliciesTest.groovy:181)
+</failure>
+    <system-out><![CDATA[?[1;30m21:35:15?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Starting testcase
+?[1;30m21:36:16?[0;39m | ?[34mINFO ?[0;39m | Services                  | Failed to trigger Apache Struts: CVE-2017-5638 after waiting 60 seconds
+?[1;30m21:36:16?[0;39m | ?[1;31mERROR?[0;39m | Helpers                   | An exception occurred in test
+org.spockframework.runtime.ConditionNotSatisfiedError: Condition not satisfied:
+
+waitForViolation(deploymentName,  policyName, 60)
+|                |                |
+false            qadefpolstruts   Apache Struts: CVE-2017-5638
+
+	at DefaultPoliciesTest.$spock_feature_1_0(DefaultPoliciesTest.groovy:181) [1 skipped]
+	at util.OnFailureInterceptor.intercept(OnFailure.groovy:72) [8 skipped]
+	at util.OnFailureInterceptor.intercept(OnFailure.groovy:72) [10 skipped]
+ [6 skipped]
+?[1;30m21:36:16?[0;39m | ?[39mDEBUG?[0;39m | Helpers                   | 2022-09-30 21:36:16 Will collect various stackrox logs for this failure under /tmp/qa-tests-backend-logs/a57dc4b9-70eb-4391-8a00-c5948fef733d/
+?[1;30m21:37:07?[0;39m | ?[39mDEBUG?[0;39m | Helpers                   | Ran: ./scripts/ci/collect-service-logs.sh stackrox /tmp/qa-tests-backend-logs/a57dc4b9-70eb-4391-8a00-c5948fef733d/stackrox-k8s-logs
+Exit: 0
+]]></system-out>
+  </testcase>
+  <testcase name="Verify policy Wget in Image is triggered" classname="DefaultPoliciesTest" time="3.267">
+    <system-out><![CDATA[?[1;30m21:39:40?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Starting testcase
+?[1;30m21:39:40?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Temporarily enabled policy 'Wget in Image'
+?[1;30m21:39:43?[0;39m | ?[34mINFO ?[0;39m | Services                  | violation size is: 1
+?[1;30m21:39:43?[0;39m | ?[34mINFO ?[0;39m | Services                  | Wget in Image triggered after waiting 3 seconds
+?[1;30m21:39:43?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Re-disabled policy 'Wget in Image'
+?[1;30m21:39:43?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Ending testcase
+]]></system-out>
+  </testcase>
+  <testcase name="Verify policy 90-Day Image Age is triggered" classname="DefaultPoliciesTest" time="0.143">
+    <system-out><![CDATA[?[1;30m21:39:43?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Starting testcase
+?[1;30m21:39:43?[0;39m | ?[34mINFO ?[0;39m | Services                  | violation size is: 1
+?[1;30m21:39:43?[0;39m | ?[34mINFO ?[0;39m | Services                  | 90-Day Image Age triggered after waiting 0 seconds
+?[1;30m21:39:43?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Ending testcase
+]]></system-out>
+  </testcase>
+  <testcase name="Verify policy Ubuntu Package Manager in Image is triggered" classname="DefaultPoliciesTest" time="0.117">
+    <system-out><![CDATA[?[1;30m21:39:43?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Starting testcase
+?[1;30m21:39:43?[0;39m | ?[34mINFO ?[0;39m | Services                  | violation size is: 1
+?[1;30m21:39:43?[0;39m | ?[34mINFO ?[0;39m | Services                  | Ubuntu Package Manager in Image triggered after waiting 0 seconds
+?[1;30m21:39:43?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Ending testcase
+]]></system-out>
+  </testcase>
+  <testcase name="Verify policy Fixable CVSS &gt;= 7 is triggered" classname="DefaultPoliciesTest" time="3.238">
+    <system-out><![CDATA[?[1;30m21:39:43?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Starting testcase
+?[1;30m21:39:44?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Temporarily enabled policy 'Fixable CVSS >= 7'
+?[1;30m21:39:47?[0;39m | ?[34mINFO ?[0;39m | Services                  | violation size is: 2
+?[1;30m21:39:47?[0;39m | ?[34mINFO ?[0;39m | Services                  | Fixable CVSS >= 7 triggered after waiting 3 seconds
+?[1;30m21:39:47?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Re-disabled policy 'Fixable CVSS >= 7'
+?[1;30m21:39:47?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Ending testcase
+]]></system-out>
+  </testcase>
+  <testcase name="Verify policy Curl in Image is triggered" classname="DefaultPoliciesTest" time="3.262">
+    <system-out><![CDATA[?[1;30m21:39:47?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Starting testcase
+?[1;30m21:39:47?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Temporarily enabled policy 'Curl in Image'
+?[1;30m21:39:50?[0;39m | ?[34mINFO ?[0;39m | Services                  | violation size is: 1
+?[1;30m21:39:50?[0;39m | ?[34mINFO ?[0;39m | Services                  | Curl in Image triggered after waiting 3 seconds
+?[1;30m21:39:50?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Re-disabled policy 'Curl in Image'
+?[1;30m21:39:50?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Ending testcase
+]]></system-out>
+  </testcase>
+  <testcase name="Verify that Kubernetes Dashboard violation is generated" classname="DefaultPoliciesTest" time="0.0">
+    <skipped/>
+  </testcase>
+  <testcase name="Notifier for StackRox images with fixable vulns" classname="DefaultPoliciesTest" time="0.0">
+    <skipped/>
+  </testcase>
+  <testcase name="Verify risk factors on struts deployment: #riskFactor" classname="DefaultPoliciesTest" time="0.0">
+    <skipped/>
+  </testcase>
+  <testcase name="Verify that built-in services don't trigger unexpected alerts" classname="DefaultPoliciesTest" time="0.0">
+    <skipped/>
+  </testcase>
+  <testcase name="Verify that alert counts API is consistent with alerts" classname="DefaultPoliciesTest" time="0.0">
+    <skipped/>
+  </testcase>
+  <testcase name="Verify that alert groups API is consistent with alerts" classname="DefaultPoliciesTest" time="0.0">
+    <skipped/>
+  </testcase>
+  <system-out><![CDATA[?[1;30m21:34:35?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Starting testsuite
+?[1;30m21:34:36?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Namespace qa already exists
+?[1;30m21:34:36?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Adding core image integration
+?[1;30m21:34:36?[0;39m | ?[39mDEBUG?[0;39m | ImageIntegrationService   | Integration tested: core quay
+?[1;30m21:34:37?[0;39m | ?[39mDEBUG?[0;39m | ImageIntegrationService   | Integration created: core quay: 41850b26-35a4-4bc9-af6b-8e276db57d7c
+?[1;30m21:34:37?[0;39m | ?[39mDEBUG?[0;39m | ImageIntegrationService   | Integration found after creation: core quay: 41850b26-35a4-4bc9-af6b-8e276db57d7c
+?[1;30m21:34:37?[0;39m | ?[39mDEBUG?[0;39m | ImageIntegrationService   | Integration tested: gcr
+?[1;30m21:34:38?[0;39m | ?[39mDEBUG?[0;39m | ImageIntegrationService   | Integration created: gcr: a8db721e-3688-4d11-9b6d-9e812487e683
+?[1;30m21:34:38?[0;39m | ?[39mDEBUG?[0;39m | ImageIntegrationService   | Integration found after creation: gcr: a8db721e-3688-4d11-9b6d-9e812487e683
+?[1;30m21:34:38?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Namespace qa already exists
+?[1;30m21:34:38?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Told the orchestrator to createOrReplace qadefpolnginxlatest. Attempt 1 of 0
+?[1;30m21:34:38?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Namespace qa already exists
+?[1;30m21:34:38?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Told the orchestrator to createOrReplace qadefpolstruts. Attempt 1 of 0
+?[1;30m21:34:38?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Namespace qa already exists
+?[1;30m21:34:38?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Told the orchestrator to createOrReplace qadefpolsslterm. Attempt 1 of 0
+?[1;30m21:34:38?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Namespace qa already exists
+?[1;30m21:34:38?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Told the orchestrator to createOrReplace qadefpolnginx110. Attempt 1 of 0
+?[1;30m21:34:38?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Namespace qa already exists
+?[1;30m21:34:38?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Told the orchestrator to createOrReplace qadefpolnginx. Attempt 1 of 0
+?[1;30m21:34:38?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Waiting for qadefpolnginxlatest to start
+?[1;30m21:34:38?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Status of qadefpolnginxlatest's pods:
+?[1;30m21:34:38?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	- qadefpolnginxlatest-bffcf7ff-w7gkh
+?[1;30m21:34:38?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	  Container status: ContainerState(running=null, terminated=null, waiting=ContainerStateWaiting(message=null, reason=ContainerCreating, additionalProperties={}), additionalProperties={})
+?[1;30m21:34:38?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 0/1 are in the ready state for qadefpolnginxlatest
+?[1;30m21:34:41?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Waiting for qadefpolnginxlatest to start
+?[1;30m21:34:41?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Status of qadefpolnginxlatest's pods:
+?[1;30m21:34:41?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	- qadefpolnginxlatest-bffcf7ff-w7gkh
+?[1;30m21:34:41?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	  Container status: ContainerState(running=ContainerStateRunning(startedAt=2022-09-30T21:34:39Z, additionalProperties={}), terminated=null, waiting=null, additionalProperties={})
+?[1;30m21:34:41?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | All 1 replicas found in ready state for qadefpolnginxlatest
+?[1;30m21:34:41?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Took 3 seconds for k8s deployment qadefpolnginxlatest
+?[1;30m21:34:41?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Waiting for qadefpolstruts to start
+?[1;30m21:34:41?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Status of qadefpolstruts's pods:
+?[1;30m21:34:42?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	- qadefpolstruts-84bccd89cb-lbdcw
+?[1;30m21:34:42?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	  Container status: ContainerState(running=null, terminated=null, waiting=ContainerStateWaiting(message=null, reason=ContainerCreating, additionalProperties={}), additionalProperties={})
+?[1;30m21:34:42?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 0/1 are in the ready state for qadefpolstruts
+?[1;30m21:34:45?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Waiting for qadefpolstruts to start
+?[1;30m21:34:45?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Status of qadefpolstruts's pods:
+?[1;30m21:34:45?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	- qadefpolstruts-84bccd89cb-lbdcw
+?[1;30m21:34:45?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	  Container status: ContainerState(running=null, terminated=null, waiting=ContainerStateWaiting(message=null, reason=ContainerCreating, additionalProperties={}), additionalProperties={})
+?[1;30m21:34:45?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 0/1 are in the ready state for qadefpolstruts
+?[1;30m21:34:48?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Waiting for qadefpolstruts to start
+?[1;30m21:34:48?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Status of qadefpolstruts's pods:
+?[1;30m21:34:48?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	- qadefpolstruts-84bccd89cb-lbdcw
+?[1;30m21:34:48?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	  Container status: ContainerState(running=null, terminated=null, waiting=ContainerStateWaiting(message=null, reason=ContainerCreating, additionalProperties={}), additionalProperties={})
+?[1;30m21:34:48?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 0/1 are in the ready state for qadefpolstruts
+?[1;30m21:34:51?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Waiting for qadefpolstruts to start
+?[1;30m21:34:51?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Status of qadefpolstruts's pods:
+?[1;30m21:34:51?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	- qadefpolstruts-84bccd89cb-lbdcw
+?[1;30m21:34:51?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	  Container status: ContainerState(running=null, terminated=null, waiting=ContainerStateWaiting(message=null, reason=ContainerCreating, additionalProperties={}), additionalProperties={})
+?[1;30m21:34:51?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 0/1 are in the ready state for qadefpolstruts
+?[1;30m21:34:54?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Waiting for qadefpolstruts to start
+?[1;30m21:34:54?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Status of qadefpolstruts's pods:
+?[1;30m21:34:54?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	- qadefpolstruts-84bccd89cb-lbdcw
+?[1;30m21:34:54?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	  Container status: ContainerState(running=null, terminated=null, waiting=ContainerStateWaiting(message=null, reason=ContainerCreating, additionalProperties={}), additionalProperties={})
+?[1;30m21:34:54?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 0/1 are in the ready state for qadefpolstruts
+?[1;30m21:34:57?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Waiting for qadefpolstruts to start
+?[1;30m21:34:57?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Status of qadefpolstruts's pods:
+?[1;30m21:34:57?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	- qadefpolstruts-84bccd89cb-lbdcw
+?[1;30m21:34:57?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	  Container status: ContainerState(running=ContainerStateRunning(startedAt=2022-09-30T21:34:54Z, additionalProperties={}), terminated=null, waiting=null, additionalProperties={})
+?[1;30m21:34:57?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | All 1 replicas found in ready state for qadefpolstruts
+?[1;30m21:34:57?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Took 15 seconds for k8s deployment qadefpolstruts
+?[1;30m21:34:57?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Waiting for qadefpolsslterm to start
+?[1;30m21:34:57?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Status of qadefpolsslterm's pods:
+?[1;30m21:34:57?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	- qadefpolsslterm-559886db4c-5jhpm
+?[1;30m21:34:57?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	  Container status: ContainerState(running=null, terminated=null, waiting=ContainerStateWaiting(message=null, reason=ContainerCreating, additionalProperties={}), additionalProperties={})
+?[1;30m21:34:57?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 0/1 are in the ready state for qadefpolsslterm
+?[1;30m21:35:00?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Waiting for qadefpolsslterm to start
+?[1;30m21:35:00?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Status of qadefpolsslterm's pods:
+?[1;30m21:35:00?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	- qadefpolsslterm-559886db4c-5jhpm
+?[1;30m21:35:00?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	  Container status: ContainerState(running=ContainerStateRunning(startedAt=2022-09-30T21:34:57Z, additionalProperties={}), terminated=null, waiting=null, additionalProperties={})
+?[1;30m21:35:00?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | All 1 replicas found in ready state for qadefpolsslterm
+?[1;30m21:35:00?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Took 3 seconds for k8s deployment qadefpolsslterm
+?[1;30m21:35:00?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Waiting for qadefpolnginx110 to start
+?[1;30m21:35:00?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Status of qadefpolnginx110's pods:
+?[1;30m21:35:00?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	- qadefpolnginx110-5c7f8b94f-cl9bb
+?[1;30m21:35:00?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	  Container status: ContainerState(running=null, terminated=null, waiting=ContainerStateWaiting(message=null, reason=ContainerCreating, additionalProperties={}), additionalProperties={})
+?[1;30m21:35:00?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 0/1 are in the ready state for qadefpolnginx110
+?[1;30m21:35:03?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Waiting for qadefpolnginx110 to start
+?[1;30m21:35:03?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Status of qadefpolnginx110's pods:
+?[1;30m21:35:03?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	- qadefpolnginx110-5c7f8b94f-cl9bb
+?[1;30m21:35:03?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	  Container status: ContainerState(running=null, terminated=null, waiting=ContainerStateWaiting(message=null, reason=ContainerCreating, additionalProperties={}), additionalProperties={})
+?[1;30m21:35:03?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 0/1 are in the ready state for qadefpolnginx110
+?[1;30m21:35:06?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Waiting for qadefpolnginx110 to start
+?[1;30m21:35:06?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Status of qadefpolnginx110's pods:
+?[1;30m21:35:06?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	- qadefpolnginx110-5c7f8b94f-cl9bb
+?[1;30m21:35:06?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	  Container status: ContainerState(running=null, terminated=null, waiting=ContainerStateWaiting(message=null, reason=ContainerCreating, additionalProperties={}), additionalProperties={})
+?[1;30m21:35:06?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 0/1 are in the ready state for qadefpolnginx110
+?[1;30m21:35:09?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Waiting for qadefpolnginx110 to start
+?[1;30m21:35:10?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Status of qadefpolnginx110's pods:
+?[1;30m21:35:10?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	- qadefpolnginx110-5c7f8b94f-cl9bb
+?[1;30m21:35:10?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	  Container status: ContainerState(running=ContainerStateRunning(startedAt=2022-09-30T21:35:06Z, additionalProperties={}), terminated=null, waiting=null, additionalProperties={})
+?[1;30m21:35:10?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | All 1 replicas found in ready state for qadefpolnginx110
+?[1;30m21:35:10?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Took 9 seconds for k8s deployment qadefpolnginx110
+?[1;30m21:35:10?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Waiting for qadefpolnginx to start
+?[1;30m21:35:10?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Status of qadefpolnginx's pods:
+?[1;30m21:35:10?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	- qadefpolnginx-58fc855b9f-dfwsm
+?[1;30m21:35:10?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	  Container status: ContainerState(running=null, terminated=null, waiting=ContainerStateWaiting(message=null, reason=ContainerCreating, additionalProperties={}), additionalProperties={})
+?[1;30m21:35:10?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 0/1 are in the ready state for qadefpolnginx
+?[1;30m21:35:13?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Waiting for qadefpolnginx to start
+?[1;30m21:35:13?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Status of qadefpolnginx's pods:
+?[1;30m21:35:13?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	- qadefpolnginx-58fc855b9f-dfwsm
+?[1;30m21:35:13?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | 	  Container status: ContainerState(running=ContainerStateRunning(startedAt=2022-09-30T21:35:11Z, additionalProperties={}), terminated=null, waiting=null, additionalProperties={})
+?[1;30m21:35:13?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | All 1 replicas found in ready state for qadefpolnginx
+?[1;30m21:35:13?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Took 3 seconds for k8s deployment qadefpolnginx
+?[1;30m21:35:13?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | qadefpolstruts: Service created
+?[1;30m21:35:13?[0;39m | ?[34mINFO ?[0;39m | Services                  | SR found deployment qadefpolnginxlatest within 0s
+?[1;30m21:35:13?[0;39m | ?[34mINFO ?[0;39m | Services                  | SR found deployment qadefpolstruts within 0s
+?[1;30m21:35:13?[0;39m | ?[34mINFO ?[0;39m | Services                  | SR found deployment qadefpolsslterm within 0s
+?[1;30m21:35:13?[0;39m | ?[34mINFO ?[0;39m | Services                  | SR found deployment qadefpolnginx110 within 0s
+?[1;30m21:35:13?[0;39m | ?[34mINFO ?[0;39m | Services                  | SR found deployment qadefpolnginx within 0s
+?[1;30m21:35:13?[0;39m | ?[39mDEBUG?[0;39m | Helpers                   | Will scan quay.io/rhacs-eng/qa:struts-app to default-policies-test-struts-app.json
+?[1;30m21:39:50?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Removed the deployment: qadefpolnginxlatest
+?[1;30m21:39:50?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Removed the deployment: qadefpolstruts
+?[1;30m21:39:50?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Removed the deployment: qadefpolsslterm
+?[1;30m21:39:50?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Removed the deployment: qadefpolnginx110
+?[1;30m21:39:50?[0;39m | ?[39mDEBUG?[0;39m | Kubernetes                | Removed the deployment: qadefpolnginx
+?[1;30m21:39:51?[0;39m | ?[39mDEBUG?[0;39m | ImageIntegrationService   | Image integration deleted: a8db721e-3688-4d11-9b6d-9e812487e683
+?[1;30m21:39:51?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Ending testsuite
+?[1;30m21:39:51?[0;39m | ?[34mINFO ?[0;39m | DefaultPoliciesTest       | Removing integration
+?[1;30m21:39:51?[0;39m | ?[39mDEBUG?[0;39m | ImageIntegrationService   | Image integration deleted: 41850b26-35a4-4bc9-af6b-8e276db57d7c
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
