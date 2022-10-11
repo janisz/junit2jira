@@ -17,6 +17,7 @@ import (
 
 const jql = `project in (ROX)
 AND issuetype = Bug
+AND status != Closed
 AND labels = CI_Failure
 AND summary ~ %q
 ORDER BY created DESC`
