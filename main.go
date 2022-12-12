@@ -7,6 +7,7 @@ import (
 	"github.com/andygrunwald/go-jira"
 	"github.com/hashicorp/go-multierror"
 	"github.com/joshdk/go-junit"
+	"github.com/tidwall/gjson"
 	"io"
 	"log"
 	"net/http"
@@ -26,8 +27,10 @@ func main() {
 
 	jiraUrl := ""
 	junitReportsDir := ""
+	dryRun := false
 	flag.StringVar(&jiraUrl, "jira-url", "https://issues.redhat.com/", "Url of JIRA instance")
 	flag.StringVar(&junitReportsDir, "junit-reports-dir", os.Getenv("ARTIFACT_DIR"), "Dir that contains jUnit reports XML files")
+	flag.BoolVar(&dryRun, "dry-run", false, "When set to true issues will NOT be created.")
 	flag.Parse()
 
 	failedTests, err := findFailedTests(junitReportsDir, Env())
@@ -47,16 +50,16 @@ func main() {
 		log.Fatal(err)
 	}
 
-	err = createIssuesOrComments(failedTests, jiraClient)
+	err = createIssuesOrComments(failedTests, jiraClient, dryRun)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func createIssuesOrComments(failedTests []testCase, jiraClient *jira.Client) error {
+func createIssuesOrComments(failedTests []testCase, jiraClient *jira.Client, dryRun bool) error {
 	var result error
 	for _, tc := range failedTests {
-		err := createIssueOrComment(jiraClient, tc)
+		err := createIssueOrComment(jiraClient, tc, dryRun)
 		if err != nil {
 			result = multierror.Append(result, err)
 		}
@@ -64,7 +67,7 @@ func createIssuesOrComments(failedTests []testCase, jiraClient *jira.Client) err
 	return result
 }
 
-func createIssueOrComment(jiraClient *jira.Client, tc testCase) error {
+func createIssueOrComment(jiraClient *jira.Client, tc testCase, dryRun bool) error {
 	summary, err := tc.summary()
 	if err != nil {
 		return fmt.Errorf("could not get summary: %w", err)
@@ -84,6 +87,14 @@ func createIssueOrComment(jiraClient *jira.Client, tc testCase) error {
 
 	if issue == nil {
 		log.Println("Issue not found. Creating new issue...")
+		log.Println(summary)
+		log.Println(description)
+		if dryRun {
+			log.Println("Dry run: will just print issue content")
+			log.Println(summary)
+			log.Println(description)
+			return nil
+		}
 		create, response, err := jiraClient.Issue.Create(newIssue(summary, description))
 		if response != nil && err != nil {
 			logError(err, response)
@@ -95,6 +106,14 @@ func createIssueOrComment(jiraClient *jira.Client, tc testCase) error {
 
 	comment := jira.Comment{
 		Body: description,
+	}
+
+	log.Printf("Found issue: %s %s. Creating a coment...", issue.ID, issue.Fields.Summary)
+
+	if dryRun {
+		log.Println("Dry run: will just print comment")
+		log.Println(description)
+		return nil
 	}
 
 	addComment, response, err := jiraClient.Issue.AddComment(issue.ID, &comment)
@@ -189,8 +208,8 @@ const (
 {{- end }}
 
 ||    ENV     ||      Value           ||
-| BUILD ID     | {{- .BuildId -}}      |
-| BUILD TAG    | {{- .BuildTag -}}     |
+| BUILD ID     | [{{- .BuildId -}}|https://prow.ci.openshift.org/view/gs/origin-ci-test/logs/{{- .JobName -}}/{{- .BuildId -}}]|
+| BUILD TAG    | [{{- .BuildTag -}}|{{- .BaseLink -}}]|
 | JOB NAME     | {{- .JobName -}}      |
 | CLUSTER      | {{- .Cluster -}}      |
 | ORCHESTRATOR | {{- .Orchestrator -}} |
@@ -209,9 +228,12 @@ type testCase struct {
 	JobName      string
 	Orchestrator string
 	BuildTag     string
+	BaseLink     string
 }
 
 func NewTestCase(tc junit.Test, env map[string]string) testCase {
+	jobSpec := env["JOB_SPEC"]
+	baseLink := gjson.Get(jobSpec, "refs.base_link").String()
 	return testCase{
 		Name:         tc.Name,
 		Message:      tc.Message,
@@ -223,6 +245,7 @@ func NewTestCase(tc junit.Test, env map[string]string) testCase {
 		JobName:      env["JOB_NAME"],
 		Orchestrator: env["ORCHESTRATOR_FLAVOR"],
 		BuildTag:     env["STACKROX_BUILD_TAG"],
+		BaseLink:     baseLink,
 	}
 }
 

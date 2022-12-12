@@ -70,32 +70,37 @@ func TestParseJunitReport(t *testing.T) {
 						"?[1;30m21:36:16?[0;39m | ?[39mDEBUG?[0;39m | Helpers                   | 2022-09-30 21:36:16 Will collect various stackrox logs for this failure under /tmp/qa-tests-backend-logs/a57dc4b9-70eb-4391-8a00-c5948fef733d/\n" +
 						"?[1;30m21:37:07?[0;39m | ?[39mDEBUG?[0;39m | Helpers                   | Ran: ./scripts/ci/collect-service-logs.sh stackrox /tmp/qa-tests-backend-logs/a57dc4b9-70eb-4391-8a00-c5948fef733d/stackrox-k8s-logs\n" +
 						"Exit: 0\n",
-					Stderr:  "",
 					Suite:   "DefaultPoliciesTest",
 					BuildId: "1",
 				},
 				{
 					Name:    "TestLocalScannerTLSIssuerIntegrationTests",
 					Message: "Failed",
-					Stdout:  "",
-					Stderr:  "",
 					Suite:   "github.com/stackrox/rox/sensor/kubernetes/localscanner",
 					BuildId: "1",
 				},
 				{
 					Name:    "TestLocalScannerTLSIssuerIntegrationTests/TestSuccessfulRefresh",
 					Message: "Failed",
-					Stdout:  "",
-					Stderr:  "",
 					Suite:   "github.com/stackrox/rox/sensor/kubernetes/localscanner",
 					BuildId: "1",
 				},
 				{
 					Name:    "TestLocalScannerTLSIssuerIntegrationTests/TestSuccessfulRefresh/no_secrets",
 					Message: "Failed",
-					Stdout:  "",
-					Stderr:  "",
 					Suite:   "github.com/stackrox/rox/sensor/kubernetes/localscanner",
+					BuildId: "1",
+				},
+				{
+					Name:    "TestCollectionsStore",
+					Suite:   "github.com/stackrox/rox/central/resourcecollection/datastore/store/postgres",
+					Message: "Failed",
+					BuildId: "1",
+				},
+				{
+					Name:    "TestCollectionsStore/TestStore",
+					Suite:   "github.com/stackrox/rox/central/resourcecollection/datastore/store/postgres",
+					Message: "Failed",
 					BuildId: "1",
 				},
 			},
@@ -178,8 +183,8 @@ org.spockframework.runtime.ConditionNotSatisfiedError: Condition not satisfied:
 {code}
 
 ||    ENV     ||      Value           ||
-| BUILD ID     |1|
-| BUILD TAG    ||
+| BUILD ID     | [1|https://prow.ci.openshift.org/view/gs/origin-ci-test/logs//1]|
+| BUILD TAG    | [|]|
 | JOB NAME     ||
 | CLUSTER      ||
 | ORCHESTRATOR ||
