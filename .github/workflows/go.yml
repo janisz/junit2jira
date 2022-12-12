@@ -26,3 +26,25 @@ jobs:
 
     - name: Test
       run: go test -v ./...
+
+    - name: Upload binary
+      uses: actions/upload-artifact@v3
+      with:
+        name: junit2jira
+        path: junit2jira
+
+    release:
+      if: startsWith(github.ref, 'refs/tags/')
+      needs: build
+      runs-on: ubuntu-latest
+      steps:
+        - name: Download executables
+          uses: actions/download-artifact@v3
+          with:
+            name: junit2jira
+        - name: Release
+          uses: softprops/action-gh-release@v1
+          if: startsWith(github.ref, 'refs/tags/')
+          with:
+            files: |
+              junit2jira
