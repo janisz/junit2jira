@@ -1,4 +1,4 @@
-module github.com/stackrox/junit2jira
+module github.com/janisz/junit2jira
 
 go 1.19
 
