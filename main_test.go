@@ -7,12 +7,12 @@ import (
 
 func TestParseJunitReport(t *testing.T) {
 	t.Run("not existing", func(t *testing.T) {
-		tests, err := findFailedTests("not existing", nil)
+		tests, err := findFailedTests("not existing", nil, 0)
 		assert.Error(t, err)
 		assert.Nil(t, tests)
 	})
 	t.Run("golang", func(t *testing.T) {
-		tests, err := findFailedTests("testdata/report.xml", nil)
+		tests, err := findFailedTests("testdata/report.xml", nil, 0)
 		assert.NoError(t, err)
 		assert.Equal(t, []testCase{
 			{
@@ -38,9 +38,44 @@ func TestParseJunitReport(t *testing.T) {
 			},
 		}, tests)
 	})
+	t.Run("golang with threshold", func(t *testing.T) {
+		tests, err := findFailedTests("testdata/report.xml", map[string]string{"JOB_NAME": "job-name"}, 1)
+		assert.NoError(t, err)
+		assert.Equal(t, []testCase{
+			{
+				Message: `github.com/stackrox/rox/sensor/kubernetes/localscanner / TestLocalScannerTLSIssuerIntegrationTests FAILED
+github.com/stackrox/rox/sensor/kubernetes/localscanner / TestLocalScannerTLSIssuerIntegrationTests/TestSuccessfulRefresh FAILED
+github.com/stackrox/rox/sensor/kubernetes/localscanner / TestLocalScannerTLSIssuerIntegrationTests/TestSuccessfulRefresh/no_secrets FAILED
+`,
+				JobName: "job-name",
+				Suite:   "github.com/stackrox/rox/sensor/kubernetes/localscanner",
+			},
+		}, tests)
+	})
+	t.Run("dir multiple suites with threshold", func(t *testing.T) {
+		tests, err := findFailedTests("testdata", map[string]string{"JOB_NAME": "job-name", "BUILD_ID": "1"}, 5)
+		assert.NoError(t, err)
 
+		assert.ElementsMatch(
+			t,
+			[]testCase{
+				{
+					Message: `DefaultPoliciesTest / Verify policy Apache Struts: CVE-2017-5638 is triggered FAILED
+github.com/stackrox/rox/sensor/kubernetes/localscanner / TestLocalScannerTLSIssuerIntegrationTests FAILED
+github.com/stackrox/rox/sensor/kubernetes/localscanner / TestLocalScannerTLSIssuerIntegrationTests/TestSuccessfulRefresh FAILED
+github.com/stackrox/rox/sensor/kubernetes/localscanner / TestLocalScannerTLSIssuerIntegrationTests/TestSuccessfulRefresh/no_secrets FAILED
+github.com/stackrox/rox/central/resourcecollection/datastore/store/postgres / TestCollectionsStore FAILED
+github.com/stackrox/rox/central/resourcecollection/datastore/store/postgres / TestCollectionsStore/TestStore FAILED
+`,
+					JobName: "job-name",
+					BuildId: "1",
+				},
+			},
+			tests,
+		)
+	})
 	t.Run("dir", func(t *testing.T) {
-		tests, err := findFailedTests("testdata", map[string]string{"BUILD_ID": "1"})
+		tests, err := findFailedTests("testdata", map[string]string{"BUILD_ID": "1"}, 0)
 		assert.NoError(t, err)
 
 		assert.ElementsMatch(
@@ -108,7 +143,7 @@ func TestParseJunitReport(t *testing.T) {
 		)
 	})
 	t.Run("gradle", func(t *testing.T) {
-		tests, err := findFailedTests("testdata/TEST-DefaultPoliciesTest.xml", map[string]string{"BUILD_ID": "1"})
+		tests, err := findFailedTests("testdata/TEST-DefaultPoliciesTest.xml", map[string]string{"BUILD_ID": "1"}, 0)
 		assert.NoError(t, err)
 
 		assert.Equal(

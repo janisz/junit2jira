@@ -3,6 +3,8 @@ name: Go
 on:
   push:
     branches: [ "main" ]
+    tags:
+      - v*
   pull_request:
     branches: [ "main" ]
 
@@ -22,7 +24,12 @@ jobs:
       uses: golangci/golangci-lint-action@v3
 
     - name: Build
-      run: go build -v ./...
+      run: CGO_ENABLED=0 go build -a -tags netgo -ldflags '-s -w' -v ./...
+
+    - name: Compress binaries
+      uses: svenstaro/upx-action@v2
+      with:
+        file: junit2jira
 
     - name: Test
       run: go test -v ./...

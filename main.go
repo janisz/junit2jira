@@ -7,6 +7,7 @@ import (
 	"github.com/andygrunwald/go-jira"
 	"github.com/hashicorp/go-multierror"
 	"github.com/joshdk/go-junit"
+	"github.com/pkg/errors"
 	"github.com/tidwall/gjson"
 	"io"
 	"log"
@@ -28,12 +29,14 @@ func main() {
 	jiraUrl := ""
 	junitReportsDir := ""
 	dryRun := false
+	threshold := 0
 	flag.StringVar(&jiraUrl, "jira-url", "https://issues.redhat.com/", "Url of JIRA instance")
 	flag.StringVar(&junitReportsDir, "junit-reports-dir", os.Getenv("ARTIFACT_DIR"), "Dir that contains jUnit reports XML files")
 	flag.BoolVar(&dryRun, "dry-run", false, "When set to true issues will NOT be created.")
+	flag.IntVar(&threshold, "threshold", 10, "Number of reported failures that should cause single issue creation.")
 	flag.Parse()
 
-	failedTests, err := findFailedTests(junitReportsDir, Env())
+	failedTests, err := findFailedTests(junitReportsDir, Env(), threshold)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -171,7 +174,7 @@ func Env() map[string]string {
 	return m
 }
 
-func findFailedTests(dirName string, env map[string]string) ([]testCase, error) {
+func findFailedTests(dirName string, env map[string]string, threshold int) ([]testCase, error) {
 	failedTests := make([]testCase, 0)
 	testSuites, err := junit.IngestDir(dirName)
 	if err != nil {
@@ -186,7 +189,34 @@ func findFailedTests(dirName string, env map[string]string) ([]testCase, error) 
 		}
 	}
 	log.Printf("Found %d failed tests", len(failedTests))
+
+	if len(failedTests) > threshold && threshold > 0 {
+		return mergeFailedTests(failedTests, env)
+	}
+
 	return failedTests, nil
+}
+
+func mergeFailedTests(failedTests []testCase, env map[string]string) ([]testCase, error) {
+	log.Println("Too many failed tests, reporting them as a one failure.")
+	msg := ""
+	suite := failedTests[0].Suite
+	for _, t := range failedTests {
+		summary, err := t.summary()
+		if err != nil {
+			return nil, errors.Wrapf(err, "could not get summary of %+v", t)
+		}
+		// If there are multiple suites, do not report them.
+		if suite != t.Suite {
+			suite = ""
+		}
+		msg += summary + "\n"
+	}
+	tc := NewTestCase(junit.Test{
+		Message:   msg,
+		Classname: suite,
+	}, env)
+	return []testCase{tc}, nil
 }
 
 const (
