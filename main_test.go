@@ -60,7 +60,7 @@ github.com/stackrox/rox/sensor/kubernetes/localscanner / TestLocalScannerTLSIssu
 			t,
 			[]testCase{
 				{
-					Message: `DefaultPoliciesTest / Verify policy Apache Struts: CVE-2017-5638 is triggered FAILED
+					Message: `DefaultPoliciesTest / Verify policy Apache Struts  CVE-2017-5638 is triggered FAILED
 github.com/stackrox/rox/sensor/kubernetes/localscanner / TestLocalScannerTLSIssuerIntegrationTests FAILED
 github.com/stackrox/rox/sensor/kubernetes/localscanner / TestLocalScannerTLSIssuerIntegrationTests/TestSuccessfulRefresh FAILED
 github.com/stackrox/rox/sensor/kubernetes/localscanner / TestLocalScannerTLSIssuerIntegrationTests/TestSuccessfulRefresh/no_secrets FAILED
@@ -226,5 +226,5 @@ org.spockframework.runtime.ConditionNotSatisfiedError: Condition not satisfied:
 `, actual)
 	s, err := tc.summary()
 	assert.NoError(t, err)
-	assert.Equal(t, `DefaultPoliciesTest / Verify policy Apache Struts: CVE-2017-5638 is triggered FAILED`, s)
+	assert.Equal(t, `DefaultPoliciesTest / Verify policy Apache Struts  CVE-2017-5638 is triggered FAILED`, s)
 }
