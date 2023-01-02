@@ -297,12 +297,11 @@ type testCase struct {
 func NewTestCase(tc junit.Test, env map[string]string) testCase {
 	jobSpec := env["JOB_SPEC"]
 	baseLink := gjson.Get(jobSpec, "refs.base_link").String()
-	return testCase{
+	c := testCase{
 		Name:         tc.Name,
 		Message:      tc.Message,
 		Stdout:       tc.SystemOut,
 		Stderr:       tc.SystemErr,
-		Error:        tc.Error.Error(),
 		Suite:        tc.Classname,
 		BuildId:      env["BUILD_ID"],
 		Cluster:      env["CLUSTER_NAME"],
@@ -311,6 +310,11 @@ func NewTestCase(tc junit.Test, env map[string]string) testCase {
 		BuildTag:     env["STACKROX_BUILD_TAG"],
 		BaseLink:     baseLink,
 	}
+
+	if tc.Error != nil {
+		c.Error = tc.Error.Error()
+	}
+	return c
 }
 
 func (tc *testCase) description() (string, error) {
