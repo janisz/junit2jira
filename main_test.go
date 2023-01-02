@@ -16,24 +16,17 @@ func TestParseJunitReport(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, []testCase{
 			{
+				Name:    "TestDifferentBaseTypes",
+				Suite:   "github.com/stackrox/rox/pkg/booleanpolicy/evaluator",
+				Message: "Failed\nSub test TestDifferentBaseTypes/base_ts,_query_by_relative,_does_not_match: Failed\nSub test TestDifferentBaseTypes/base_ts,_query_by_relative,_does_not_match/on_fully_hydrated_object: Failed\nSub test TestDifferentBaseTypes/base_ts,_query_by_relative,_does_not_match/on_augmented_object: Failed",
+				Error:   "Failed\nSub test TestDifferentBaseTypes/base_ts,_query_by_relative,_does_not_match: Failed\nSub test TestDifferentBaseTypes/base_ts,_query_by_relative,_does_not_match/on_fully_hydrated_object: \n         evaluator_test.go:96: Error Trace: /go/src/github.com/stackrox/stackrox/pkg/booleanpolicy/evaluator/evaluator_test.go:96 /go/src/github.com/stackrox/stackrox/pkg/booleanpolicy/evaluator/evaluator_test.go:123 Error: Not equal: expected: false actual : true Test: TestDifferentBaseTypes/base_ts,_query_by_relative,_does_not_match/on_fully_hydrated_object \n    \nSub test TestDifferentBaseTypes/base_ts,_query_by_relative,_does_not_match/on_augmented_object: \n         evaluator_test.go:96: Error Trace: /go/src/github.com/stackrox/stackrox/pkg/booleanpolicy/evaluator/evaluator_test.go:96 /go/src/github.com/stackrox/stackrox/pkg/booleanpolicy/evaluator/evaluator_test.go:145 Error: Not equal: expected: false actual : true Test: TestDifferentBaseTypes/base_ts,_query_by_relative,_does_not_match/on_augmented_object \n    ",
+			},
+			{
 				Name:    "TestLocalScannerTLSIssuerIntegrationTests",
-				Message: "Failed",
+				Message: "Failed\nSub test TestLocalScannerTLSIssuerIntegrationTests/TestSuccessfulRefresh: Failed\nSub test TestLocalScannerTLSIssuerIntegrationTests/TestSuccessfulRefresh/no_secrets: Failed",
 				Stdout:  "",
 				Stderr:  "",
-				Suite:   "github.com/stackrox/rox/sensor/kubernetes/localscanner",
-			},
-			{
-				Name:    "TestLocalScannerTLSIssuerIntegrationTests/TestSuccessfulRefresh",
-				Message: "Failed",
-				Stdout:  "",
-				Stderr:  "",
-				Suite:   "github.com/stackrox/rox/sensor/kubernetes/localscanner",
-			},
-			{
-				Name:    "TestLocalScannerTLSIssuerIntegrationTests/TestSuccessfulRefresh/no_secrets",
-				Message: "Failed",
-				Stdout:  "",
-				Stderr:  "",
+				Error:   "    env_isolator.go:41: EnvIsolator: Setting ROX_MTLS_CA_FILE to /go/src/github.com/stackrox/stackrox/pkg/mtls/testutils/testdata/central-certs/ca.pem\n    env_isolator.go:41: EnvIsolator: Setting ROX_MTLS_CA_KEY_FILE to /go/src/github.com/stackrox/stackrox/pkg/mtls/testutils/testdata/central-certs/ca-key.pem\n    env_isolator.go:41: EnvIsolator: Setting ROX_MTLS_CERT_FILE to /go/src/github.com/stackrox/stackrox/pkg/mtls/testutils/testdata/central-certs/leaf-cert.pem\n    env_isolator.go:41: EnvIsolator: Setting ROX_MTLS_KEY_FILE to /go/src/github.com/stackrox/stackrox/pkg/mtls/testutils/testdata/central-certs/leaf-key.pem\n    env_isolator.go:41: EnvIsolator: Setting ROX_MTLS_CA_FILE to /go/src/github.com/stackrox/stackrox/pkg/mtls/testutils/testdata/central-certs/ca.pem\n    env_isolator.go:41: EnvIsolator: Setting ROX_MTLS_CA_KEY_FILE to /go/src/github.com/stackrox/stackrox/pkg/mtls/testutils/testdata/central-certs/ca-key.pem\n    env_isolator.go:41: EnvIsolator: Setting ROX_MTLS_CERT_FILE to /go/src/github.com/stackrox/stackrox/pkg/mtls/testutils/testdata/central-certs/leaf-cert.pem\n    env_isolator.go:41: EnvIsolator: Setting ROX_MTLS_KEY_FILE to /go/src/github.com/stackrox/stackrox/pkg/mtls/testutils/testdata/central-certs/leaf-key.pem\nSub test TestLocalScannerTLSIssuerIntegrationTests/TestSuccessfulRefresh: Failed\nSub test TestLocalScannerTLSIssuerIntegrationTests/TestSuccessfulRefresh/no_secrets:     tls_issuer_test.go:377:\n        \tError Trace:\t/go/src/github.com/stackrox/stackrox/sensor/kubernetes/localscanner/tls_issuer_test.go:377\n        \t            \t\t\t\t/go/src/github.com/stackrox/stackrox/sensor/kubernetes/localscanner/tls_issuer_test.go:298\n        \t            \t\t\t\t/go/src/github.com/stackrox/stackrox/sensor/kubernetes/localscanner/suite.go:91\n        \tError:      \tcontext deadline exceeded\n        \tTest:       \tTestLocalScannerTLSIssuerIntegrationTests/TestSuccessfulRefresh/no_secrets\nkubernetes/localscanner: 2022/10/03 07:32:47.446934 cert_refresher.go:109: Warn: local scanner certificates not found (this is expected on a new deployment), will refresh certificates immediately: 2 errors occurred:\n\t* secrets \"scanner-tls\" not found\n\t* secrets \"scanner-db-tls\" not found\n\n",
 				Suite:   "github.com/stackrox/rox/sensor/kubernetes/localscanner",
 			},
 		}, tests)
@@ -107,35 +100,33 @@ github.com/stackrox/rox/central/resourcecollection/datastore/store/postgres / Te
 						"Exit: 0\n",
 					Suite:   "DefaultPoliciesTest",
 					BuildId: "1",
+					Error: "Condition not satisfied:\n" +
+						"\n" +
+						"waitForViolation(deploymentName,  policyName, 60)\n" +
+						"|                |                |\n" +
+						"false            qadefpolstruts   Apache Struts: CVE-2017-5638\n" +
+						"\n" +
+						"\tat DefaultPoliciesTest.Verify policy #policyName is triggered(DefaultPoliciesTest.groovy:181)\n",
+				},
+				{
+					Name:    "TestDifferentBaseTypes",
+					Suite:   "github.com/stackrox/rox/pkg/booleanpolicy/evaluator",
+					Message: "Failed\nSub test TestDifferentBaseTypes/base_ts,_query_by_relative,_does_not_match: Failed\nSub test TestDifferentBaseTypes/base_ts,_query_by_relative,_does_not_match/on_fully_hydrated_object: Failed\nSub test TestDifferentBaseTypes/base_ts,_query_by_relative,_does_not_match/on_augmented_object: Failed",
+					Error:   "Failed\nSub test TestDifferentBaseTypes/base_ts,_query_by_relative,_does_not_match: Failed\nSub test TestDifferentBaseTypes/base_ts,_query_by_relative,_does_not_match/on_fully_hydrated_object: \n         evaluator_test.go:96: Error Trace: /go/src/github.com/stackrox/stackrox/pkg/booleanpolicy/evaluator/evaluator_test.go:96 /go/src/github.com/stackrox/stackrox/pkg/booleanpolicy/evaluator/evaluator_test.go:123 Error: Not equal: expected: false actual : true Test: TestDifferentBaseTypes/base_ts,_query_by_relative,_does_not_match/on_fully_hydrated_object \n    \nSub test TestDifferentBaseTypes/base_ts,_query_by_relative,_does_not_match/on_augmented_object: \n         evaluator_test.go:96: Error Trace: /go/src/github.com/stackrox/stackrox/pkg/booleanpolicy/evaluator/evaluator_test.go:96 /go/src/github.com/stackrox/stackrox/pkg/booleanpolicy/evaluator/evaluator_test.go:145 Error: Not equal: expected: false actual : true Test: TestDifferentBaseTypes/base_ts,_query_by_relative,_does_not_match/on_augmented_object \n    ",
+					BuildId: "1",
 				},
 				{
 					Name:    "TestLocalScannerTLSIssuerIntegrationTests",
-					Message: "Failed",
+					Message: "Failed\nSub test TestLocalScannerTLSIssuerIntegrationTests/TestSuccessfulRefresh: Failed\nSub test TestLocalScannerTLSIssuerIntegrationTests/TestSuccessfulRefresh/no_secrets: Failed",
 					Suite:   "github.com/stackrox/rox/sensor/kubernetes/localscanner",
-					BuildId: "1",
-				},
-				{
-					Name:    "TestLocalScannerTLSIssuerIntegrationTests/TestSuccessfulRefresh",
-					Message: "Failed",
-					Suite:   "github.com/stackrox/rox/sensor/kubernetes/localscanner",
-					BuildId: "1",
-				},
-				{
-					Name:    "TestLocalScannerTLSIssuerIntegrationTests/TestSuccessfulRefresh/no_secrets",
-					Message: "Failed",
-					Suite:   "github.com/stackrox/rox/sensor/kubernetes/localscanner",
+					Error:   "    env_isolator.go:41: EnvIsolator: Setting ROX_MTLS_CA_FILE to /go/src/github.com/stackrox/stackrox/pkg/mtls/testutils/testdata/central-certs/ca.pem\n    env_isolator.go:41: EnvIsolator: Setting ROX_MTLS_CA_KEY_FILE to /go/src/github.com/stackrox/stackrox/pkg/mtls/testutils/testdata/central-certs/ca-key.pem\n    env_isolator.go:41: EnvIsolator: Setting ROX_MTLS_CERT_FILE to /go/src/github.com/stackrox/stackrox/pkg/mtls/testutils/testdata/central-certs/leaf-cert.pem\n    env_isolator.go:41: EnvIsolator: Setting ROX_MTLS_KEY_FILE to /go/src/github.com/stackrox/stackrox/pkg/mtls/testutils/testdata/central-certs/leaf-key.pem\n    env_isolator.go:41: EnvIsolator: Setting ROX_MTLS_CA_FILE to /go/src/github.com/stackrox/stackrox/pkg/mtls/testutils/testdata/central-certs/ca.pem\n    env_isolator.go:41: EnvIsolator: Setting ROX_MTLS_CA_KEY_FILE to /go/src/github.com/stackrox/stackrox/pkg/mtls/testutils/testdata/central-certs/ca-key.pem\n    env_isolator.go:41: EnvIsolator: Setting ROX_MTLS_CERT_FILE to /go/src/github.com/stackrox/stackrox/pkg/mtls/testutils/testdata/central-certs/leaf-cert.pem\n    env_isolator.go:41: EnvIsolator: Setting ROX_MTLS_KEY_FILE to /go/src/github.com/stackrox/stackrox/pkg/mtls/testutils/testdata/central-certs/leaf-key.pem\nSub test TestLocalScannerTLSIssuerIntegrationTests/TestSuccessfulRefresh: Failed\nSub test TestLocalScannerTLSIssuerIntegrationTests/TestSuccessfulRefresh/no_secrets:     tls_issuer_test.go:377:\n        \tError Trace:\t/go/src/github.com/stackrox/stackrox/sensor/kubernetes/localscanner/tls_issuer_test.go:377\n        \t            \t\t\t\t/go/src/github.com/stackrox/stackrox/sensor/kubernetes/localscanner/tls_issuer_test.go:298\n        \t            \t\t\t\t/go/src/github.com/stackrox/stackrox/sensor/kubernetes/localscanner/suite.go:91\n        \tError:      \tcontext deadline exceeded\n        \tTest:       \tTestLocalScannerTLSIssuerIntegrationTests/TestSuccessfulRefresh/no_secrets\nkubernetes/localscanner: 2022/10/03 07:32:47.446934 cert_refresher.go:109: Warn: local scanner certificates not found (this is expected on a new deployment), will refresh certificates immediately: 2 errors occurred:\n\t* secrets \"scanner-tls\" not found\n\t* secrets \"scanner-db-tls\" not found\n\n",
 					BuildId: "1",
 				},
 				{
 					Name:    "TestCollectionsStore",
 					Suite:   "github.com/stackrox/rox/central/resourcecollection/datastore/store/postgres",
-					Message: "Failed",
-					BuildId: "1",
-				},
-				{
-					Name:    "TestCollectionsStore/TestStore",
-					Suite:   "github.com/stackrox/rox/central/resourcecollection/datastore/store/postgres",
-					Message: "Failed",
+					Message: "Failed\nSub test TestCollectionsStore/TestStore: Failed",
+					Error:   "    env_isolator.go:41: EnvIsolator: Setting ROX_POSTGRES_DATASTORE to true\nSub test TestCollectionsStore/TestStore:     store_test.go:47: collections TRUNCATE TABLE\n    store_test.go:95:\n        \tError Trace:\t/go/src/github.com/stackrox/stackrox/central/resourcecollection/datastore/store/postgres/store_test.go:95\n        \tError:      \tReceived unexpected error:\n        \t            \tERROR: update or delete on table \"collections\" violates foreign key constraint \"fk_collections_embedded_collections_collections_cycle_ref\" on table \"collections_embedded_collections\" (SQLSTATE 23503)\n        \t            \tcould not delete from \"collections\"\n        \t            \tgithub.com/stackrox/rox/pkg/search/postgres.RunDeleteRequestForSchema.func1\n        \t            \t\t/go/src/github.com/stackrox/stackrox/pkg/search/postgres/common.go:833\n        \t            \tgithub.com/stackrox/rox/pkg/postgres/pgutils.Retry.func1\n        \t            \t\t/go/src/github.com/stackrox/stackrox/pkg/postgres/pgutils/retry.go:21\n        \t            \tgithub.com/stackrox/rox/pkg/postgres/pgutils.Retry2[...].func1\n        \t            \t\t/go/src/github.com/stackrox/stackrox/pkg/postgres/pgutils/retry.go:32\n        \t            \tgithub.com/stackrox/rox/pkg/postgres/pgutils.Retry3[...]\n        \t            \t\t/go/src/github.com/stackrox/stackrox/pkg/postgres/pgutils/retry.go:43\n        \t            \tgithub.com/stackrox/rox/pkg/postgres/pgutils.Retry2[...]\n        \t            \t\t/go/src/github.com/stackrox/stackrox/pkg/postgres/pgutils/retry.go:35\n        \t            \tgithub.com/stackrox/rox/pkg/postgres/pgutils.Retry\n        \t            \t\t/go/src/github.com/stackrox/stackrox/pkg/postgres/pgutils/retry.go:23\n        \t            \tgithub.com/stackrox/rox/pkg/search/postgres.RunDeleteRequestForSchema\n        \t            \t\t/go/src/github.com/stackrox/stackrox/pkg/search/postgres/common.go:830\n        \t            \tgithub.com/stackrox/rox/central/resourcecollection/datastore/store/postgres.(*storeImpl).Delete\n        \t            \t\t/go/src/github.com/stackrox/stackrox/central/resourcecollection/datastore/store/postgres/store.go:429\n        \t            \tgithub.com/stackrox/rox/central/resourcecollection/datastore/store/postgres.(*CollectionsStoreSuite).TestStore\n        \t            \t\t/go/src/github.com/stackrox/stackrox/central/resourcecollection/datastore/store/postgres/store_test.go:95\n        \t            \treflect.Value.call\n        \t            \t\t/usr/local/go/src/reflect/value.go:556\n        \t            \treflect.Value.Call\n        \t            \t\t/usr/local/go/src/reflect/value.go:339\n        \t            \tgithub.com/stretchr/testify/suite.Run.func1\n        \t            \t\t/go/pkg/mod/github.com/stretchr/testify@v1.8.0/suite/suite.go:175\n        \t            \ttesting.tRunner\n        \t            \t\t/usr/local/go/src/testing/testing.go:1439\n        \t            \truntime.goexit\n        \t            \t\t/usr/local/go/src/runtime/asm_amd64.s:1571\n        \tTest:       \tTestCollectionsStore/TestStore\n    store_test.go:98:\n        \tError Trace:\t/go/src/github.com/stackrox/stackrox/central/resourcecollection/datastore/store/postgres/store_test.go:98\n        \tError:      \tShould be false\n        \tTest:       \tTestCollectionsStore/TestStore\n    store_test.go:99:\n        \tError Trace:\t/go/src/github.com/stackrox/stackrox/central/resourcecollection/datastore/store/postgres/store_test.go:99\n        \tError:      \tExpected nil, but got: &storage.ResourceCollection{Id:\"a\", Name:\"a\", Description:\"a\", CreatedAt:&types.Timestamp{Seconds: 1,\n        \t            \tNanos: 1,\n        \t            \t}, LastUpdated:&types.Timestamp{Seconds: 1,\n        \t            \tNanos: 1,\n        \t            \t}, CreatedBy:(*storage.SlimUser)(0xc00085fb00), UpdatedBy:(*storage.SlimUser)(0xc00085fb40), ResourceSelectors:[]*storage.ResourceSelector{(*storage.ResourceSelector)(0xc00085fb80)}, EmbeddedCollections:[]*storage.ResourceCollection_EmbeddedResourceCollection{(*storage.ResourceCollection_EmbeddedResourceCollection)(0xc0011e00f0)}, XXX_NoUnkeyedLiteral:struct {}{}, XXX_unrecognized:[]uint8(nil), XXX_sizecache:0}\n        \tTest:       \tTestCollectionsStore/TestStore\n    store_test.go:114:\n        \tError Trace:\t/go/src/github.com/stackrox/stackrox/central/resourcecollection/datastore/store/postgres/store_test.go:114\n        \tError:      \tNot equal:\n        \t            \texpected: 200\n        \t            \tactual  : 201\n        \tTest:       \tTestCollectionsStore/TestStore",
 					BuildId: "1",
 				},
 			},
@@ -175,6 +166,13 @@ github.com/stackrox/rox/central/resourcecollection/datastore/store/postgres / Te
 				Stderr:  "",
 				Suite:   "DefaultPoliciesTest",
 				BuildId: "1",
+				Error: "Condition not satisfied:\n" +
+					"\n" +
+					"waitForViolation(deploymentName,  policyName, 60)\n" +
+					"|                |                |\n" +
+					"false            qadefpolstruts   Apache Struts: CVE-2017-5638\n" +
+					"\n" +
+					"\tat DefaultPoliciesTest.Verify policy #policyName is triggered(DefaultPoliciesTest.groovy:181)\n",
 			}},
 			tests,
 		)

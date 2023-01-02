@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="10849" failures="3" skipped="63">
+<testsuites tests="10849" failures="7" skipped="63">
 	<testsuite name="github.com/stackrox/rox/central/activecomponent/datastore/index" tests="2" failures="0" errors="0" id="0" hostname="merge-go-unit-tests-release-stackrox-initial" time="0.563" timestamp="2022-10-03T07:33:22Z">
 		<properties>
 			<property name="coverage.statements.pct" value="66.70"></property>
@@ -10735,138 +10735,150 @@ ok  	github.com/stackrox/rox/pkg/bolthelper/tests	0.083s	coverage: [no statement
 		<testcase name="TestCompound/simple_compound_query,_AND,_negated,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
 		<testcase name="TestCompound/simple_compound_query,_AND,_negated,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
 		<testcase name="TestCompound/simple_compound_query,_AND,_negated,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.020"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ptr,_null_query,_nil_pointer" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ptr,_null_query,_nil_pointer/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ptr,_null_query,_nil_pointer/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ptr,_not_null_query,_nil_pointer" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ptr,_not_null_query,_nil_pointer/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ptr,_not_null_query,_nil_pointer/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ptr,_null_query,_non-nil" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ptr,_null_query,_non-nil/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ptr,_null_query,_non-nil/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ptr,_not_null_query,_non-nil" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ptr,_not_null_query,_non-nil/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ptr,_not_null_query,_non-nil/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ptr,_regular_string_query,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ptr,_regular_string_query,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ptr,_regular_string_query,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ptr,_regular_string_query,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ptr,_regular_string_query,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ptr,_regular_string_query,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_bool,_should_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_bool,_should_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_bool,_should_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_bool,_should_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_bool,_should_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_bool,_should_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_bool,_with_negation" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_bool,_with_negation/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_bool,_with_negation/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_null,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_null,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_null,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_null_query,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_null_query,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_null_query,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_null_ts,_but_valid_query,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_null_ts,_but_valid_query,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_null_ts,_but_valid_query,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_null_ts,_not_null_query,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_null_ts,_not_null_query,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_null_ts,_not_null_query,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_null_ts,_but_valid_query,_negated,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_null_ts,_but_valid_query,_negated,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_null_ts,_but_valid_query,_negated,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_valid_ts,_not_null_query,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_valid_ts,_not_null_query,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_valid_ts,_not_null_query,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_query_by_absolute,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_query_by_absolute,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_query_by_absolute,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_query_by_absolute,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_query_by_absolute,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_query_by_absolute,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_query_by_absolute,_negate" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_query_by_absolute,_negate/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_query_by_absolute,_negate/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_query_by_relative,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_query_by_relative,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_query_by_relative,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_query_by_relative,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_query_by_relative,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_ts,_query_by_relative,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_int,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_int,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_int,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_int,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_int,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_int,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_uint,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_uint,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_uint,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_uint,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_uint,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_uint,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_float,_matches_and_is_a_whole_number" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_float,_matches_and_is_a_whole_number/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_float,_matches_and_is_a_whole_number/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_float,_exact_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_float,_exact_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_float,_exact_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_float,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_float,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_float,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_float,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_float,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_float,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_enum,_exact,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_enum,_exact,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_enum,_exact,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_enum,_exact,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_enum,_exact,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_enum,_exact,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_enum,_range,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_enum,_range,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_enum,_range,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_enum,_range,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_enum,_range,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_enum,_range,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_enum,_complex_range,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_enum,_complex_range,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_enum,_complex_range,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_enum,_complex_range,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_enum,_complex_range,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_enum,_complex_range,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_struct_ptr,_nil,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_struct_ptr,_nil,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_struct_ptr,_nil,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_struct_ptr,_not_nil,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_struct_ptr,_not_nil,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_struct_ptr,_not_nil,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_struct_ptr,_nil,_negated,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_struct_ptr,_nil,_negated,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_struct_ptr,_nil,_negated,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_struct_ptr,_not_nil,_negated,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_struct_ptr,_not_nil,_negated,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypes/base_struct_ptr,_not_nil,_negated,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypesMatchAll" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_nil_pointer" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_nil_pointer/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_nil_pointer/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_nil_pointer,_no_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_nil_pointer,_no_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_nil_pointer,_no_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_nil_pointer,_negated" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_nil_pointer,_negated/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_nil_pointer,_negated/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_nil_pointer,_negated,_no_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_nil_pointer,_negated,_no_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_nil_pointer,_negated,_no_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_not_null_query,_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_not_null_query,_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-		<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_not_null_query,_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"></testcase>
-	</testsuite>
+<testcase name="TestDifferentBaseTypes" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.050">
+    <failure message="Failed"/>
+</testcase>
+<testcase name="TestDifferentBaseTypes/base_ptr,_null_query,_nil_pointer" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ptr,_null_query,_nil_pointer/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ptr,_null_query,_nil_pointer/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ptr,_not_null_query,_nil_pointer" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ptr,_not_null_query,_nil_pointer/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ptr,_not_null_query,_nil_pointer/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ptr,_null_query,_non-nil" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ptr,_null_query,_non-nil/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ptr,_null_query,_non-nil/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ptr,_not_null_query,_non-nil" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ptr,_not_null_query,_non-nil/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ptr,_not_null_query,_non-nil/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ptr,_regular_string_query,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ptr,_regular_string_query,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ptr,_regular_string_query,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ptr,_regular_string_query,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ptr,_regular_string_query,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ptr,_regular_string_query,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_bool,_should_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_bool,_should_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_bool,_should_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_bool,_should_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_bool,_should_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_bool,_should_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_bool,_with_negation" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_bool,_with_negation/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_bool,_with_negation/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_null,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_null,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_null,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_null_query,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_null_query,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_null_query,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_null_ts,_but_valid_query,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_null_ts,_but_valid_query,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_null_ts,_but_valid_query,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_null_ts,_not_null_query,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_null_ts,_not_null_query,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_null_ts,_not_null_query,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_null_ts,_but_valid_query,_negated,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_null_ts,_but_valid_query,_negated,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_null_ts,_but_valid_query,_negated,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_valid_ts,_not_null_query,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_valid_ts,_not_null_query,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_valid_ts,_not_null_query,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_query_by_absolute,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_query_by_absolute,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_query_by_absolute,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_query_by_absolute,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_query_by_absolute,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_query_by_absolute,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_query_by_absolute,_negate" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_query_by_absolute,_negate/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_query_by_absolute,_negate/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_query_by_relative,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_query_by_relative,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_query_by_relative,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_ts,_query_by_relative,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000">
+    <failure message="Failed"/>
+</testcase>
+<testcase name="TestDifferentBaseTypes/base_ts,_query_by_relative,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000">
+    <failure message="Failed">
+        <![CDATA[ evaluator_test.go:96: Error Trace: /go/src/github.com/stackrox/stackrox/pkg/booleanpolicy/evaluator/evaluator_test.go:96 /go/src/github.com/stackrox/stackrox/pkg/booleanpolicy/evaluator/evaluator_test.go:123 Error: Not equal: expected: false actual : true Test: TestDifferentBaseTypes/base_ts,_query_by_relative,_does_not_match/on_fully_hydrated_object ]]>
+    </failure>
+</testcase>
+<testcase name="TestDifferentBaseTypes/base_ts,_query_by_relative,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000">
+    <failure message="Failed">
+        <![CDATA[ evaluator_test.go:96: Error Trace: /go/src/github.com/stackrox/stackrox/pkg/booleanpolicy/evaluator/evaluator_test.go:96 /go/src/github.com/stackrox/stackrox/pkg/booleanpolicy/evaluator/evaluator_test.go:145 Error: Not equal: expected: false actual : true Test: TestDifferentBaseTypes/base_ts,_query_by_relative,_does_not_match/on_augmented_object ]]>
+    </failure>
+</testcase>
+<testcase name="TestDifferentBaseTypes/base_int,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_int,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_int,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_int,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_int,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_int,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_uint,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_uint,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_uint,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_uint,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_uint,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_uint,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_float,_matches_and_is_a_whole_number" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_float,_matches_and_is_a_whole_number/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_float,_matches_and_is_a_whole_number/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_float,_exact_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_float,_exact_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_float,_exact_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_float,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_float,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_float,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_float,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_float,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_float,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_enum,_exact,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.010"/>
+<testcase name="TestDifferentBaseTypes/base_enum,_exact,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.010"/>
+<testcase name="TestDifferentBaseTypes/base_enum,_exact,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_enum,_exact,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_enum,_exact,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_enum,_exact,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_enum,_range,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_enum,_range,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_enum,_range,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_enum,_range,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_enum,_range,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_enum,_range,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_enum,_complex_range,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_enum,_complex_range,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_enum,_complex_range,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_enum,_complex_range,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_enum,_complex_range,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_enum,_complex_range,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_struct_ptr,_nil,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_struct_ptr,_nil,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_struct_ptr,_nil,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_struct_ptr,_not_nil,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_struct_ptr,_not_nil,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_struct_ptr,_not_nil,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_struct_ptr,_nil,_negated,_does_not_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_struct_ptr,_nil,_negated,_does_not_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_struct_ptr,_nil,_negated,_does_not_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_struct_ptr,_not_nil,_negated,_matches" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_struct_ptr,_not_nil,_negated,_matches/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypes/base_struct_ptr,_not_nil,_negated,_matches/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypesMatchAll" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.010"/>
+<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_nil_pointer" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_nil_pointer/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_nil_pointer/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_nil_pointer,_no_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_nil_pointer,_no_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_nil_pointer,_no_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_nil_pointer,_negated" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_nil_pointer,_negated/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_nil_pointer,_negated/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_nil_pointer,_negated,_no_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_nil_pointer,_negated,_no_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_nil_pointer,_negated,_no_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_not_null_query,_match" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_not_null_query,_match/on_fully_hydrated_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+<testcase name="TestDifferentBaseTypesMatchAll/base_ptr,_not_null_query,_match/on_augmented_object" classname="github.com/stackrox/rox/pkg/booleanpolicy/evaluator" time="0.000"/>
+</testsuite>
 	<testsuite name="github.com/stackrox/rox/pkg/booleanpolicy/evaluator/pathutil" tests="32" failures="0" errors="0" id="457" hostname="merge-go-unit-tests-release-stackrox-initial" time="0.112" timestamp="2022-10-03T07:33:22Z">
 		<properties>
 			<property name="coverage.statements.pct" value="85.50"></property>
@@ -17595,7 +17607,8 @@ the login page, and log in with username "admin" and the password found in the
          test-token ]]></system-out>
 		</testcase>
 		<testcase name="TestToken/Test_RetrieveAuthToken_ShouldTrimLeadingAndTrailingWhitespace_Windows" classname="github.com/stackrox/rox/roxctl/common" time="0.000">
-			<system-out><![CDATA[    env_isolator.go:41: EnvIsolator: Setting ROX_API_TOKEN to   test-token ]]></system-out>
+			<system-out><![CDATA[    env_isolator.go:41: EnvIsolator: Setting ROX_API_TOKEN to  
+ test-token ]]></system-out>
 		</testcase>
 		<testcase name="TestToken/Test_RetrieveAuthToken_WithEnv" classname="github.com/stackrox/rox/roxctl/common" time="0.000">
 			<system-out><![CDATA[    env_isolator.go:41: EnvIsolator: Setting ROX_API_TOKEN to test-token]]></system-out>

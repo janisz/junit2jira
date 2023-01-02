@@ -186,7 +186,7 @@ func findFailedTests(dirName string, env map[string]string, threshold int) ([]te
 			if tc.Error == nil {
 				continue
 			}
-			failedTests = append(failedTests, NewTestCase(tc, env))
+			failedTests = addFailedTest(failedTests, tc, env)
 		}
 	}
 	log.Printf("Found %d failed tests", len(failedTests))
@@ -218,6 +218,32 @@ func mergeFailedTests(failedTests []testCase, env map[string]string) ([]testCase
 		Classname: suite,
 	}, env)
 	return []testCase{tc}, nil
+}
+
+func addFailedTest(failedTests []testCase, tc junit.Test, env map[string]string) []testCase {
+	if !isSubTest(tc) {
+		return append(failedTests, NewTestCase(tc, env))
+	}
+	return addSubTestToFailedTest(tc, failedTests, env)
+}
+
+func isSubTest(tc junit.Test) bool {
+	return strings.Contains(tc.Name, "/")
+}
+
+func addSubTestToFailedTest(subTest junit.Test, failedTests []testCase, env map[string]string) []testCase {
+	// As long as the separator is not empty, split will always return a slice of length 1.
+	name := strings.Split(subTest.Name, "/")[0]
+	for i, failedTest := range failedTests {
+		// Only consider a failed test a "parent" of the test if the name matches _and_ the class name is the same.
+		if failedTest.Name == name && failedTest.Suite == subTest.Classname {
+			failedTest.addSubTest(subTest)
+			failedTests[i] = failedTest
+			return failedTests
+		}
+	}
+	// In case we found no matches, we will default to add the subtest plain.
+	return append(failedTests, NewTestCase(subTest, env))
 }
 
 const (
@@ -254,6 +280,7 @@ type testCase struct {
 	Message      string
 	Stdout       string
 	Stderr       string
+	Error        string
 	BuildId      string
 	Cluster      string
 	JobName      string
@@ -270,6 +297,7 @@ func NewTestCase(tc junit.Test, env map[string]string) testCase {
 		Message:      tc.Message,
 		Stdout:       tc.SystemOut,
 		Stderr:       tc.SystemErr,
+		Error:        tc.Error.Error(),
 		Suite:        tc.Classname,
 		BuildId:      env["BUILD_ID"],
 		Cluster:      env["CLUSTER_NAME"],
@@ -280,8 +308,8 @@ func NewTestCase(tc junit.Test, env map[string]string) testCase {
 	}
 }
 
-func (tc testCase) description() (string, error) {
-	return render(tc, desc)
+func (tc *testCase) description() (string, error) {
+	return render(*tc, desc)
 }
 
 func (tc testCase) summary() (string, error) {
@@ -290,6 +318,23 @@ func (tc testCase) summary() (string, error) {
 		return "", err
 	}
 	return clearString(s), nil
+}
+
+const subTestFormat = "\nSub test %s: %s"
+
+func (tc *testCase) addSubTest(subTest junit.Test) {
+	if subTest.Message != "" {
+		tc.Message += fmt.Sprintf(subTestFormat, subTest.Name, subTest.Message)
+	}
+	if subTest.SystemOut != "" {
+		tc.Stdout += fmt.Sprintf(subTestFormat, subTest.Name, subTest.SystemOut)
+	}
+	if subTest.SystemErr != "" {
+		tc.Stderr += fmt.Sprintf(subTestFormat, subTest.Name, subTest.SystemErr)
+	}
+	if subTest.Error != nil {
+		tc.Error += fmt.Sprintf(subTestFormat, subTest.Name, subTest.Error.Error())
+	}
 }
 
 func render(tc testCase, text string) (string, error) {
