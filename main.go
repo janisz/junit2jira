@@ -263,7 +263,7 @@ const (
 {{ .Stdout }}
 {code}
 {{- end }}
-{{-if .Error }}
+{{- if .Error }}
 {code:title=ERROR|borderStyle=solid}
 {{ .Error }}
 {code}

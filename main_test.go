@@ -36,17 +36,16 @@ func TestParseJunitReport(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, []testCase{
 			{
-				Message: `github.com/stackrox/rox/sensor/kubernetes/localscanner / TestLocalScannerTLSIssuerIntegrationTests FAILED
-github.com/stackrox/rox/sensor/kubernetes/localscanner / TestLocalScannerTLSIssuerIntegrationTests/TestSuccessfulRefresh FAILED
-github.com/stackrox/rox/sensor/kubernetes/localscanner / TestLocalScannerTLSIssuerIntegrationTests/TestSuccessfulRefresh/no_secrets FAILED
+				Message: `github.com/stackrox/rox/pkg/booleanpolicy/evaluator / TestDifferentBaseTypes FAILED
+github.com/stackrox/rox/sensor/kubernetes/localscanner / TestLocalScannerTLSIssuerIntegrationTests FAILED
 `,
 				JobName: "job-name",
-				Suite:   "github.com/stackrox/rox/sensor/kubernetes/localscanner",
+				Suite:   "",
 			},
 		}, tests)
 	})
 	t.Run("dir multiple suites with threshold", func(t *testing.T) {
-		tests, err := findFailedTests("testdata", map[string]string{"JOB_NAME": "job-name", "BUILD_ID": "1"}, 5)
+		tests, err := findFailedTests("testdata", map[string]string{"JOB_NAME": "job-name", "BUILD_ID": "1"}, 3)
 		assert.NoError(t, err)
 
 		assert.ElementsMatch(
@@ -54,11 +53,9 @@ github.com/stackrox/rox/sensor/kubernetes/localscanner / TestLocalScannerTLSIssu
 			[]testCase{
 				{
 					Message: `DefaultPoliciesTest / Verify policy Apache Struts  CVE-2017-5638 is triggered FAILED
+github.com/stackrox/rox/pkg/booleanpolicy/evaluator / TestDifferentBaseTypes FAILED
 github.com/stackrox/rox/sensor/kubernetes/localscanner / TestLocalScannerTLSIssuerIntegrationTests FAILED
-github.com/stackrox/rox/sensor/kubernetes/localscanner / TestLocalScannerTLSIssuerIntegrationTests/TestSuccessfulRefresh FAILED
-github.com/stackrox/rox/sensor/kubernetes/localscanner / TestLocalScannerTLSIssuerIntegrationTests/TestSuccessfulRefresh/no_secrets FAILED
 github.com/stackrox/rox/central/resourcecollection/datastore/store/postgres / TestCollectionsStore FAILED
-github.com/stackrox/rox/central/resourcecollection/datastore/store/postgres / TestCollectionsStore/TestStore FAILED
 `,
 					JobName: "job-name",
 					BuildId: "1",
