@@ -15,6 +15,7 @@ import (
 	"os"
 	"strings"
 	"text/template"
+	"unicode"
 )
 
 const jql = `project in (ROX)
@@ -284,7 +285,11 @@ func (tc testCase) description() (string, error) {
 }
 
 func (tc testCase) summary() (string, error) {
-	return render(tc, summaryTpl)
+	s, err := render(tc, summaryTpl)
+	if err != nil {
+		return "", err
+	}
+	return clearString(s), nil
 }
 
 func render(tc testCase, text string) (string, error) {
@@ -298,4 +303,13 @@ func render(tc testCase, text string) (string, error) {
 		return "", err
 	}
 	return tpl.String(), nil
+}
+
+func clearString(str string) string {
+	return strings.Map(func(r rune) rune {
+		if unicode.IsLetter(r) || unicode.IsDigit(r) || r == '.' || r == '/' || r == '-' || r == '_' {
+			return r
+		}
+		return ' '
+	}, str)
 }
