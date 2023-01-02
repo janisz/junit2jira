@@ -263,6 +263,11 @@ const (
 {{ .Stdout }}
 {code}
 {{- end }}
+{{-if .Error }}
+{code:title=ERROR|borderStyle=solid}
+{{ .Error }}
+{code}
+{{- end }}
 
 ||    ENV     ||      Value           ||
 | BUILD ID     | [{{- .BuildId -}}|https://prow.ci.openshift.org/view/gs/origin-ci-test/logs/{{- .JobName -}}/{{- .BuildId -}}]|
