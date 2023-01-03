@@ -236,7 +236,7 @@ func addSubTestToFailedTest(subTest junit.Test, failedTests []testCase, env map[
 	name := strings.Split(subTest.Name, "/")[0]
 	for i, failedTest := range failedTests {
 		// Only consider a failed test a "parent" of the test if the name matches _and_ the class name is the same.
-		if failedTest.Name == name && failedTest.Suite == subTest.Classname {
+		if isGoTest(subTest.Classname) && failedTest.Name == name && failedTest.Suite == subTest.Classname {
 			failedTest.addSubTest(subTest)
 			failedTests[i] = failedTest
 			return failedTests
@@ -244,6 +244,11 @@ func addSubTestToFailedTest(subTest junit.Test, failedTests []testCase, env map[
 	}
 	// In case we found no matches, we will default to add the subtest plain.
 	return append(failedTests, NewTestCase(subTest, env))
+}
+
+// isGoTest will verify that the corresponding classname refers to a go package by expecting the go module name as prefix.
+func isGoTest(className string) bool {
+	return strings.HasPrefix(className, "github.com/stackrox/rox")
 }
 
 const (
