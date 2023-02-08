@@ -255,22 +255,22 @@ const (
 	desc = `
 {{- if .Message }}
 {code:title=Message|borderStyle=solid}
-{{ .Message }}
+{{ .Message | truncate }}
 {code}
 {{- end }}
 {{- if .Stderr }}
 {code:title=STDERR|borderStyle=solid}
-{{ .Stderr }}
+{{ .Stderr | truncate }}
 {code}
 {{- end }}
 {{- if .Stdout }}
 {code:title=STDOUT|borderStyle=solid}
-{{ .Stdout }}
+{{ .Stdout | truncate }}
 {code}
 {{- end }}
 {{- if .Error }}
 {code:title=ERROR|borderStyle=solid}
-{{ .Error }}
+{{ .Error | truncate }}
 {code}
 {{- end }}
 
@@ -352,7 +352,7 @@ func (tc *testCase) addSubTest(subTest junit.Test) {
 }
 
 func render(tc testCase, text string) (string, error) {
-	tmpl, err := template.New("test").Parse(text)
+	tmpl, err := template.New("test").Funcs(map[string]any{"truncate": truncate}).Parse(text)
 	if err != nil {
 		return "", err
 	}
@@ -371,4 +371,14 @@ func clearString(str string) string {
 		}
 		return ' '
 	}, str)
+}
+
+var maxTextBlockLength = 10000
+
+func truncate(s string) string {
+	runes := []rune(s)
+	if len(runes) > maxTextBlockLength {
+		return string(runes[:maxTextBlockLength]) + "\n … too long truncated"
+	}
+	return s
 }
