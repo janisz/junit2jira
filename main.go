@@ -209,7 +209,7 @@ func mergeFailedTests(failedTests []testCase, env map[string]string) ([]testCase
 		}
 		// If there are multiple suites, do not report them.
 		if suite != t.Suite {
-			suite = ""
+			suite = env["JOB_NAME"]
 		}
 		msg += summary + "\n"
 	}

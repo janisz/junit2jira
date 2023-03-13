@@ -40,7 +40,7 @@ func TestParseJunitReport(t *testing.T) {
 github.com/stackrox/rox/sensor/kubernetes/localscanner / TestLocalScannerTLSIssuerIntegrationTests FAILED
 `,
 				JobName: "job-name",
-				Suite:   "",
+				Suite:   "job-name",
 			},
 		}, tests)
 	})
@@ -59,6 +59,7 @@ github.com/stackrox/rox/central/resourcecollection/datastore/store/postgres / Te
 command-line-arguments / TestTimeout FAILED
 `,
 					JobName: "job-name",
+					Suite:   "job-name",
 					BuildId: "1",
 				},
 			},
