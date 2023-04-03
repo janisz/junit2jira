@@ -8,7 +8,6 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"github.com/joshdk/go-junit"
 	"github.com/pkg/errors"
-	"github.com/tidwall/gjson"
 	"io"
 	"log"
 	"net/http"
@@ -27,6 +26,7 @@ ORDER BY created DESC`
 
 func main() {
 
+	p := params{}
 	jiraUrl := ""
 	junitReportsDir := ""
 	dryRun := false
@@ -35,9 +35,17 @@ func main() {
 	flag.StringVar(&junitReportsDir, "junit-reports-dir", os.Getenv("ARTIFACT_DIR"), "Dir that contains jUnit reports XML files")
 	flag.BoolVar(&dryRun, "dry-run", false, "When set to true issues will NOT be created.")
 	flag.IntVar(&threshold, "threshold", 10, "Number of reported failures that should cause single issue creation.")
+
+	flag.StringVar(&p.BaseLink, "base-link", "", "Link to revision")
+	flag.StringVar(&p.BuildId, "build-id", "", "Build job run ID")
+	flag.StringVar(&p.BuildLink, "build-link", "", "Link to build job")
+	flag.StringVar(&p.BuildTag, "build-tag", "", "Built tag or revision")
+	flag.StringVar(&p.JobName, "job-name", "", "Name of CI job")
+	flag.StringVar(&p.Orchestrator, "orchestrator", "", "Orchestrator name")
+
 	flag.Parse()
 
-	failedTests, err := findFailedTests(junitReportsDir, Env(), threshold)
+	failedTests, err := findFailedTests(junitReportsDir, p, threshold)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -175,7 +183,7 @@ func Env() map[string]string {
 	return m
 }
 
-func findFailedTests(dirName string, env map[string]string, threshold int) ([]testCase, error) {
+func findFailedTests(dirName string, p params, threshold int) ([]testCase, error) {
 	failedTests := make([]testCase, 0)
 	testSuites, err := junit.IngestDir(dirName)
 	if err != nil {
@@ -186,19 +194,19 @@ func findFailedTests(dirName string, env map[string]string, threshold int) ([]te
 			if tc.Error == nil {
 				continue
 			}
-			failedTests = addFailedTest(failedTests, tc, env)
+			failedTests = addFailedTest(failedTests, tc, p)
 		}
 	}
 	log.Printf("Found %d failed tests", len(failedTests))
 
 	if len(failedTests) > threshold && threshold > 0 {
-		return mergeFailedTests(failedTests, env)
+		return mergeFailedTests(failedTests, p)
 	}
 
 	return failedTests, nil
 }
 
-func mergeFailedTests(failedTests []testCase, env map[string]string) ([]testCase, error) {
+func mergeFailedTests(failedTests []testCase, p params) ([]testCase, error) {
 	log.Println("Too many failed tests, reporting them as a one failure.")
 	msg := ""
 	suite := failedTests[0].Suite
@@ -209,29 +217,29 @@ func mergeFailedTests(failedTests []testCase, env map[string]string) ([]testCase
 		}
 		// If there are multiple suites, do not report them.
 		if suite != t.Suite {
-			suite = env["JOB_NAME"]
+			suite = p.JobName
 		}
 		msg += summary + "\n"
 	}
 	tc := NewTestCase(junit.Test{
 		Message:   msg,
 		Classname: suite,
-	}, env)
+	}, p)
 	return []testCase{tc}, nil
 }
 
-func addFailedTest(failedTests []testCase, tc junit.Test, env map[string]string) []testCase {
+func addFailedTest(failedTests []testCase, tc junit.Test, p params) []testCase {
 	if !isSubTest(tc) {
-		return append(failedTests, NewTestCase(tc, env))
+		return append(failedTests, NewTestCase(tc, p))
 	}
-	return addSubTestToFailedTest(tc, failedTests, env)
+	return addSubTestToFailedTest(tc, failedTests, p)
 }
 
 func isSubTest(tc junit.Test) bool {
 	return strings.Contains(tc.Name, "/")
 }
 
-func addSubTestToFailedTest(subTest junit.Test, failedTests []testCase, env map[string]string) []testCase {
+func addSubTestToFailedTest(subTest junit.Test, failedTests []testCase, p params) []testCase {
 	// As long as the separator is not empty, split will always return a slice of length 1.
 	name := strings.Split(subTest.Name, "/")[0]
 	for i, failedTest := range failedTests {
@@ -243,7 +251,7 @@ func addSubTestToFailedTest(subTest junit.Test, failedTests []testCase, env map[
 		}
 	}
 	// In case we found no matches, we will default to add the subtest plain.
-	return append(failedTests, NewTestCase(subTest, env))
+	return append(failedTests, NewTestCase(subTest, p))
 }
 
 // isGoTest will verify that the corresponding classname refers to a go package by expecting the go module name as prefix.
@@ -275,10 +283,9 @@ const (
 {{- end }}
 
 ||    ENV     ||      Value           ||
-| BUILD ID     | [{{- .BuildId -}}|https://prow.ci.openshift.org/view/gs/origin-ci-test/logs/{{- .JobName -}}/{{- .BuildId -}}]|
+| BUILD ID     | [{{- .BuildId -}}|{{- .BuildLink -}}]|
 | BUILD TAG    | [{{- .BuildTag -}}|{{- .BaseLink -}}]|
 | JOB NAME     | {{- .JobName -}}      |
-| CLUSTER      | {{- .Cluster -}}      |
 | ORCHESTRATOR | {{- .Orchestrator -}} |
 `
 	summaryTpl = `{{ .Suite }} / {{ .Name }} FAILED`
@@ -292,28 +299,35 @@ type testCase struct {
 	Stderr       string
 	Error        string
 	BuildId      string
-	Cluster      string
 	JobName      string
 	Orchestrator string
 	BuildTag     string
 	BaseLink     string
+	BuildLink    string
 }
 
-func NewTestCase(tc junit.Test, env map[string]string) testCase {
-	jobSpec := env["JOB_SPEC"]
-	baseLink := gjson.Get(jobSpec, "refs.base_link").String()
+type params struct {
+	BuildId      string
+	JobName      string
+	Orchestrator string
+	BuildTag     string
+	BaseLink     string
+	BuildLink    string
+}
+
+func NewTestCase(tc junit.Test, p params) testCase {
 	c := testCase{
 		Name:         tc.Name,
 		Message:      tc.Message,
 		Stdout:       tc.SystemOut,
 		Stderr:       tc.SystemErr,
 		Suite:        tc.Classname,
-		BuildId:      env["BUILD_ID"],
-		Cluster:      env["CLUSTER_NAME"],
-		JobName:      env["JOB_NAME"],
-		Orchestrator: env["ORCHESTRATOR_FLAVOR"],
-		BuildTag:     env["STACKROX_BUILD_TAG"],
-		BaseLink:     baseLink,
+		BuildId:      p.BuildId,
+		JobName:      p.JobName,
+		Orchestrator: p.Orchestrator,
+		BuildTag:     p.BuildTag,
+		BaseLink:     p.BaseLink,
+		BuildLink:    p.BuildLink,
 	}
 
 	if tc.Error != nil {

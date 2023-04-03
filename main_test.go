@@ -7,12 +7,12 @@ import (
 
 func TestParseJunitReport(t *testing.T) {
 	t.Run("not existing", func(t *testing.T) {
-		tests, err := findFailedTests("not existing", nil, 0)
+		tests, err := findFailedTests("not existing", params{}, 0)
 		assert.Error(t, err)
 		assert.Nil(t, tests)
 	})
 	t.Run("golang", func(t *testing.T) {
-		tests, err := findFailedTests("testdata/report.xml", nil, 0)
+		tests, err := findFailedTests("testdata/report.xml", params{}, 0)
 		assert.NoError(t, err)
 		assert.Equal(t, []testCase{
 			{
@@ -32,7 +32,7 @@ func TestParseJunitReport(t *testing.T) {
 		}, tests)
 	})
 	t.Run("golang with threshold", func(t *testing.T) {
-		tests, err := findFailedTests("testdata/report.xml", map[string]string{"JOB_NAME": "job-name"}, 1)
+		tests, err := findFailedTests("testdata/report.xml", params{JobName: "job-name"}, 1)
 		assert.NoError(t, err)
 		assert.Equal(t, []testCase{
 			{
@@ -45,7 +45,7 @@ github.com/stackrox/rox/sensor/kubernetes/localscanner / TestLocalScannerTLSIssu
 		}, tests)
 	})
 	t.Run("dir multiple suites with threshold", func(t *testing.T) {
-		tests, err := findFailedTests("testdata", map[string]string{"JOB_NAME": "job-name", "BUILD_ID": "1"}, 3)
+		tests, err := findFailedTests("testdata", params{JobName: "job-name", BuildId: "1"}, 3)
 		assert.NoError(t, err)
 
 		assert.ElementsMatch(
@@ -67,7 +67,7 @@ command-line-arguments / TestTimeout FAILED
 		)
 	})
 	t.Run("dir", func(t *testing.T) {
-		tests, err := findFailedTests("testdata", map[string]string{"BUILD_ID": "1"}, 0)
+		tests, err := findFailedTests("testdata", params{BuildId: "1"}, 0)
 		assert.NoError(t, err)
 
 		assert.ElementsMatch(
@@ -140,7 +140,7 @@ command-line-arguments / TestTimeout FAILED
 		)
 	})
 	t.Run("gradle", func(t *testing.T) {
-		tests, err := findFailedTests("testdata/TEST-DefaultPoliciesTest.xml", map[string]string{"BUILD_ID": "1"}, 0)
+		tests, err := findFailedTests("testdata/TEST-DefaultPoliciesTest.xml", params{BuildId: "1"}, 0)
 		assert.NoError(t, err)
 
 		assert.Equal(
@@ -198,9 +198,10 @@ func TestDescription(t *testing.T) {
 			"?[1;30m21:36:16?[0;39m | ?[34mINFO ?[0;39m | Services                  | Failed to trigger Apache Struts: CVE-2017-5638 after waiting 60 seconds\n" +
 			"?[1;30m21:36:16?[0;39m | ?[1;31mERROR?[0;39m | Helpers                   | An exception occurred in test\n" +
 			"org.spockframework.runtime.ConditionNotSatisfiedError: Condition not satisfied:\n",
-		Stderr:  "",
-		Suite:   "DefaultPoliciesTest",
-		BuildId: "1",
+		Stderr:    "",
+		Suite:     "DefaultPoliciesTest",
+		BuildId:   "1",
+		BuildLink: "https://prow.ci.openshift.org/view/gs/origin-ci-test/logs//1",
 	}
 	actual, err := tc.description()
 	assert.NoError(t, err)
@@ -225,7 +226,6 @@ org.spockframework.runtime.ConditionNotSatisfiedError: Condition not satisfied:
 | BUILD ID     | [1|https://prow.ci.openshift.org/view/gs/origin-ci-test/logs//1]|
 | BUILD TAG    | [|]|
 | JOB NAME     ||
-| CLUSTER      ||
 | ORCHESTRATOR ||
 `, actual)
 	s, err := tc.summary()
@@ -253,7 +253,6 @@ waitForViolation(deploymentName,  policyName, 60)
 | BUILD ID     | [1|https://prow.ci.openshift.org/view/gs/origin-ci-test/logs//1]|
 | BUILD TAG    | [|]|
 | JOB NAME     ||
-| CLUSTER      ||
 | ORCHESTRATOR ||
 `, actual)
 }
