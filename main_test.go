@@ -232,6 +232,11 @@ org.spockframework.runtime.ConditionNotSatisfiedError: Condition not satisfied:
 	assert.NoError(t, err)
 	assert.Equal(t, `DefaultPoliciesTest / Verify policy Apache Struts  CVE-2017-5638 is triggered FAILED`, s)
 
+	maxSummaryLength = 20
+	s, err = tc.summary()
+	assert.NoError(t, err)
+	assert.Equal(t, `DefaultPoliciesTest ... FAILED`, s)
+
 	maxTextBlockLength = 100
 	actual, err = tc.description()
 	assert.NoError(t, err)
