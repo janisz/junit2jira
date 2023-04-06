@@ -27,14 +27,10 @@ ORDER BY created DESC`
 func main() {
 
 	p := params{}
-	jiraUrl := ""
-	junitReportsDir := ""
-	dryRun := false
-	threshold := 0
-	flag.StringVar(&jiraUrl, "jira-url", "https://issues.redhat.com/", "Url of JIRA instance")
-	flag.StringVar(&junitReportsDir, "junit-reports-dir", os.Getenv("ARTIFACT_DIR"), "Dir that contains jUnit reports XML files")
-	flag.BoolVar(&dryRun, "dry-run", false, "When set to true issues will NOT be created.")
-	flag.IntVar(&threshold, "threshold", 10, "Number of reported failures that should cause single issue creation.")
+	flag.StringVar(&p.jiraUrl, "jira-url", "https://issues.redhat.com/", "Url of JIRA instance")
+	flag.StringVar(&p.junitReportsDir, "junit-reports-dir", os.Getenv("ARTIFACT_DIR"), "Dir that contains jUnit reports XML files")
+	flag.BoolVar(&p.dryRun, "dry-run", false, "When set to true issues will NOT be created.")
+	flag.IntVar(&p.threshold, "threshold", 10, "Number of reported failures that should cause single issue creation.")
 	flag.StringVar(&p.BaseLink, "base-link", "", "Link to source code at the exact version under test.")
 	flag.StringVar(&p.BuildId, "build-id", "", "Build job run ID.")
 	flag.StringVar(&p.BuildLink, "build-link", "", "Link to build job.")
@@ -44,11 +40,18 @@ func main() {
 
 	flag.Parse()
 
-	failedTests, err := findFailedTests(junitReportsDir, p, threshold)
+	err := run(p)
 	if err != nil {
 		log.Fatal(err)
 	}
+}
 
+type junit2jira struct {
+	params
+	jiraClient *jira.Client
+}
+
+func run(p params) error {
 	transport := http.DefaultTransport
 
 	tp := jira.PATAuthTransport{
@@ -56,21 +59,33 @@ func main() {
 		Transport: transport,
 	}
 
-	jiraClient, err := jira.NewClient(tp.Client(), jiraUrl)
+	jiraClient, err := jira.NewClient(tp.Client(), p.jiraUrl)
 	if err != nil {
-		log.Fatal(err)
+		return errors.Wrapf(err, "could not create client for %s", p.jiraUrl)
 	}
 
-	err = createIssuesOrComments(failedTests, jiraClient, dryRun)
-	if err != nil {
-		log.Fatal(err)
+	j := &junit2jira{
+		params:     p,
+		jiraClient: jiraClient,
 	}
+
+	failedTests, err := j.findFailedTests()
+	if err != nil {
+		return errors.Wrap(err, "could not find failed tests")
+	}
+
+	err = j.createIssuesOrComments(failedTests)
+	if err != nil {
+		return errors.Wrap(err, "could not create issues or comments")
+	}
+
+	return nil
 }
 
-func createIssuesOrComments(failedTests []testCase, jiraClient *jira.Client, dryRun bool) error {
+func (j junit2jira) createIssuesOrComments(failedTests []testCase) error {
 	var result error
 	for _, tc := range failedTests {
-		err := createIssueOrComment(jiraClient, tc, dryRun)
+		err := j.createIssueOrComment(tc)
 		if err != nil {
 			result = multierror.Append(result, err)
 		}
@@ -78,7 +93,7 @@ func createIssuesOrComments(failedTests []testCase, jiraClient *jira.Client, dry
 	return result
 }
 
-func createIssueOrComment(jiraClient *jira.Client, tc testCase, dryRun bool) error {
+func (j junit2jira) createIssueOrComment(tc testCase) error {
 	summary, err := tc.summary()
 	if err != nil {
 		return fmt.Errorf("could not get summary: %w", err)
@@ -88,7 +103,7 @@ func createIssueOrComment(jiraClient *jira.Client, tc testCase, dryRun bool) err
 		return fmt.Errorf("could not get description: %w", err)
 	}
 	log.Println("Searching for ", summary)
-	search, response, err := jiraClient.Issue.Search(fmt.Sprintf(jql, summary), nil)
+	search, response, err := j.jiraClient.Issue.Search(fmt.Sprintf(jql, summary), nil)
 	if err != nil {
 		logError(err, response)
 		return fmt.Errorf("could not search: %w", err)
@@ -100,13 +115,13 @@ func createIssueOrComment(jiraClient *jira.Client, tc testCase, dryRun bool) err
 		log.Println("Issue not found. Creating new issue...")
 		log.Println(summary)
 		log.Println(description)
-		if dryRun {
+		if j.dryRun {
 			log.Println("Dry run: will just print issue content")
 			log.Println(summary)
 			log.Println(description)
 			return nil
 		}
-		create, response, err := jiraClient.Issue.Create(newIssue(summary, description))
+		create, response, err := j.jiraClient.Issue.Create(newIssue(summary, description))
 		if response != nil && err != nil {
 			logError(err, response)
 			return fmt.Errorf("could not create issue %s: %w", summary, err)
@@ -121,13 +136,13 @@ func createIssueOrComment(jiraClient *jira.Client, tc testCase, dryRun bool) err
 
 	log.Printf("Found issue: %s %s. Creating a coment...", issue.ID, issue.Fields.Summary)
 
-	if dryRun {
+	if j.dryRun {
 		log.Println("Dry run: will just print comment")
 		log.Println(description)
 		return nil
 	}
 
-	addComment, response, err := jiraClient.Issue.AddComment(issue.ID, &comment)
+	addComment, response, err := j.jiraClient.Issue.AddComment(issue.ID, &comment)
 	if response != nil && err != nil {
 		logError(err, response)
 		return fmt.Errorf("could not create issue %s: %w", summary, err)
@@ -172,19 +187,9 @@ func logError(err error, response *jira.Response) {
 	}
 }
 
-func Env() map[string]string {
-	m := make(map[string]string)
-	for _, e := range os.Environ() {
-		if i := strings.Index(e, "="); i >= 0 {
-			m[e[:i]] = e[i+1:]
-		}
-	}
-	return m
-}
-
-func findFailedTests(dirName string, p params, threshold int) ([]testCase, error) {
+func (j junit2jira) findFailedTests() ([]testCase, error) {
 	failedTests := make([]testCase, 0)
-	testSuites, err := junit.IngestDir(dirName)
+	testSuites, err := junit.IngestDir(j.junitReportsDir)
 	if err != nil {
 		return nil, fmt.Errorf("coud not read files: %w", err)
 	}
@@ -193,19 +198,19 @@ func findFailedTests(dirName string, p params, threshold int) ([]testCase, error
 			if tc.Error == nil {
 				continue
 			}
-			failedTests = addFailedTest(failedTests, tc, p)
+			failedTests = j.addFailedTest(failedTests, tc)
 		}
 	}
 	log.Printf("Found %d failed tests", len(failedTests))
 
-	if len(failedTests) > threshold && threshold > 0 {
-		return mergeFailedTests(failedTests, p)
+	if len(failedTests) > j.threshold && j.threshold > 0 {
+		return j.mergeFailedTests(failedTests)
 	}
 
 	return failedTests, nil
 }
 
-func mergeFailedTests(failedTests []testCase, p params) ([]testCase, error) {
+func (j junit2jira) mergeFailedTests(failedTests []testCase) ([]testCase, error) {
 	log.Println("Too many failed tests, reporting them as a one failure.")
 	msg := ""
 	suite := failedTests[0].Suite
@@ -216,29 +221,29 @@ func mergeFailedTests(failedTests []testCase, p params) ([]testCase, error) {
 		}
 		// If there are multiple suites, do not report them.
 		if suite != t.Suite {
-			suite = p.JobName
+			suite = j.JobName
 		}
 		msg += summary + "\n"
 	}
 	tc := NewTestCase(junit.Test{
 		Message:   msg,
 		Classname: suite,
-	}, p)
+	}, j.params)
 	return []testCase{tc}, nil
 }
 
-func addFailedTest(failedTests []testCase, tc junit.Test, p params) []testCase {
+func (j junit2jira) addFailedTest(failedTests []testCase, tc junit.Test) []testCase {
 	if !isSubTest(tc) {
-		return append(failedTests, NewTestCase(tc, p))
+		return append(failedTests, NewTestCase(tc, j.params))
 	}
-	return addSubTestToFailedTest(tc, failedTests, p)
+	return j.addSubTestToFailedTest(tc, failedTests)
 }
 
 func isSubTest(tc junit.Test) bool {
 	return strings.Contains(tc.Name, "/")
 }
 
-func addSubTestToFailedTest(subTest junit.Test, failedTests []testCase, p params) []testCase {
+func (j junit2jira) addSubTestToFailedTest(subTest junit.Test, failedTests []testCase) []testCase {
 	// As long as the separator is not empty, split will always return a slice of length 1.
 	name := strings.Split(subTest.Name, "/")[0]
 	for i, failedTest := range failedTests {
@@ -250,7 +255,7 @@ func addSubTestToFailedTest(subTest junit.Test, failedTests []testCase, p params
 		}
 	}
 	// In case we found no matches, we will default to add the subtest plain.
-	return append(failedTests, NewTestCase(subTest, p))
+	return append(failedTests, NewTestCase(subTest, j.params))
 }
 
 // isGoTest will verify that the corresponding classname refers to a go package by expecting the go module name as prefix.
@@ -312,6 +317,11 @@ type params struct {
 	BuildTag     string
 	BaseLink     string
 	BuildLink    string
+
+	threshold       int
+	dryRun          bool
+	jiraUrl         string
+	junitReportsDir string
 }
 
 func NewTestCase(tc junit.Test, p params) testCase {
