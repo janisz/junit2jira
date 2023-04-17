@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/csv"
 	"flag"
 	"fmt"
 	"github.com/andygrunwald/go-jira"
@@ -14,6 +15,7 @@ import (
 	"os"
 	"strings"
 	"text/template"
+	"time"
 	"unicode"
 )
 
@@ -25,12 +27,13 @@ AND summary ~ %q
 ORDER BY created DESC`
 
 func main() {
-
 	p := params{}
+	flag.StringVar(&p.csvOutput, "csv", "", "Convert XML to a CSV file (use dash [-] for stdout)")
 	flag.StringVar(&p.jiraUrl, "jira-url", "https://issues.redhat.com/", "Url of JIRA instance")
 	flag.StringVar(&p.junitReportsDir, "junit-reports-dir", os.Getenv("ARTIFACT_DIR"), "Dir that contains jUnit reports XML files")
 	flag.BoolVar(&p.dryRun, "dry-run", false, "When set to true issues will NOT be created.")
 	flag.IntVar(&p.threshold, "threshold", 10, "Number of reported failures that should cause single issue creation.")
+	flag.StringVar(&p.timestamp, "timestamp", time.Now().Format(time.RFC3339), "Timestamp of CI test.")
 	flag.StringVar(&p.BaseLink, "base-link", "", "Link to source code at the exact version under test.")
 	flag.StringVar(&p.BuildId, "build-id", "", "Build job run ID.")
 	flag.StringVar(&p.BuildLink, "build-link", "", "Link to build job.")
@@ -69,7 +72,17 @@ func run(p params) error {
 		jiraClient: jiraClient,
 	}
 
-	failedTests, err := j.findFailedTests()
+	testSuites, err := junit.IngestDir(p.junitReportsDir)
+	if err != nil {
+		log.Fatalf("coud not read files: %s", err)
+	}
+
+	err = j.createCsv(testSuites)
+	if err != nil {
+		log.Fatalf("coud create CSV: %s", err)
+	}
+
+	failedTests, err := j.findFailedTests(testSuites)
 	if err != nil {
 		return errors.Wrap(err, "could not find failed tests")
 	}
@@ -78,8 +91,23 @@ func run(p params) error {
 	if err != nil {
 		return errors.Wrap(err, "could not create issues or comments")
 	}
-
 	return nil
+}
+
+func (j junit2jira) createCsv(testSuites []junit.Suite) error {
+	if j.csvOutput == "" {
+		return nil
+	}
+	out := os.Stdout
+	if j.csvOutput != "-" {
+		file, err := os.Create(j.csvOutput)
+		if err != nil {
+			return fmt.Errorf("could not create file %s: %w", j.csvOutput, err)
+		}
+		out = file
+		defer file.Close()
+	}
+	return junit2csv(testSuites, j.params, out)
 }
 
 func (j junit2jira) createIssuesOrComments(failedTests []testCase) error {
@@ -187,12 +215,54 @@ func logError(err error, response *jira.Response) {
 	}
 }
 
-func (j junit2jira) findFailedTests() ([]testCase, error) {
-	failedTests := make([]testCase, 0)
-	testSuites, err := junit.IngestDir(j.junitReportsDir)
-	if err != nil {
-		return nil, fmt.Errorf("coud not read files: %w", err)
+func junit2csv(testSuites []junit.Suite, p params, output io.Writer) error {
+	w := csv.NewWriter(output)
+	header := []string{
+		"Timestamp",
+		"Classname",
+		"Name",
+		"Duration",
+		"Status",
+		"JobName",
+		"Orchestrator",
+		"BaseLink",
+		"BuildLink",
+		"BuildTag",
 	}
+	err := w.Write(header)
+	if err != nil {
+		return fmt.Errorf("coud not write header: %w", err)
+	}
+	for _, ts := range testSuites {
+		for _, tc := range ts.Tests {
+			duration := fmt.Sprintf("%d", tc.Duration.Milliseconds())
+			row := []string{
+				p.timestamp,       // Timestamp
+				tc.Classname,      // Classname
+				tc.Name,           // Name
+				duration,          // Duration
+				string(tc.Status), // Status
+				p.JobName,         // JobName
+				p.Orchestrator,    // Orchestrator
+				p.BaseLink,        // BaseLink
+				p.BuildLink,       // BuildLink
+				p.BuildTag,        // BuildTag
+			}
+			err := w.Write(row)
+			if err != nil {
+				return fmt.Errorf("coud not write row: %w", err)
+			}
+		}
+	}
+	w.Flush()
+	if w.Error() != nil {
+		return fmt.Errorf("could not flush CSV: %w", w.Error())
+	}
+	return nil
+}
+
+func (j junit2jira) findFailedTests(testSuites []junit.Suite) ([]testCase, error) {
+	failedTests := make([]testCase, 0)
 	for _, ts := range testSuites {
 		for _, tc := range ts.Tests {
 			if tc.Error == nil {
@@ -322,6 +392,8 @@ type params struct {
 	dryRun          bool
 	jiraUrl         string
 	junitReportsDir string
+	timestamp       string
+	csvOutput       string
 }
 
 func NewTestCase(tc junit.Test, p params) testCase {

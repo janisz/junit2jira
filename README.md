@@ -12,7 +12,7 @@ go build ./...
 go test ./...
 ```
 
-### Usage
+### Usage example
 ```shell
 JIRA_TOKEN="..." junit2jira \
   -jira-url "https://..." \
@@ -22,5 +22,7 @@ JIRA_TOKEN="..." junit2jira \
   -build-link "https://..." \
   -build-tag "$STACKROX_BUILD_TAG|$GITHUB_SHA" \
   -job-name "$JOB_NAME|$GITHUB_WORKFLOW" \
-  -orchestrator "$ORCHESTRATOR_FLAVOR"
+  -orchestrator "$ORCHESTRATOR_FLAVOR" \
+  -timestamp $(date --rfc-3339=seconds)
+  -csv -
 ```
