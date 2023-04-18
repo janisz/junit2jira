@@ -1,16 +1,15 @@
 package main
 
 import (
+	"bytes"
+	"github.com/joshdk/go-junit"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestParseJunitReport(t *testing.T) {
 	t.Run("not existing", func(t *testing.T) {
-		j := junit2jira{
-			params: params{junitReportsDir: "not existing"},
-		}
-		tests, err := j.findFailedTests()
+		tests, err := junit.IngestDir("not existing")
 		assert.Error(t, err)
 		assert.Nil(t, tests)
 	})
@@ -18,7 +17,9 @@ func TestParseJunitReport(t *testing.T) {
 		j := junit2jira{
 			params: params{junitReportsDir: "testdata/report.xml"},
 		}
-		tests, err := j.findFailedTests()
+		testsSuites, err := junit.IngestDir(j.junitReportsDir)
+		assert.NoError(t, err)
+		tests, err := j.findFailedTests(testsSuites)
 		assert.NoError(t, err)
 		assert.Equal(t, []testCase{
 			{
@@ -41,7 +42,9 @@ func TestParseJunitReport(t *testing.T) {
 		j := junit2jira{
 			params: params{junitReportsDir: "testdata/report.xml", JobName: "job-name", threshold: 1},
 		}
-		tests, err := j.findFailedTests()
+		testsSuites, err := junit.IngestDir(j.junitReportsDir)
+		assert.NoError(t, err)
+		tests, err := j.findFailedTests(testsSuites)
 		assert.NoError(t, err)
 		assert.Equal(t, []testCase{
 			{
@@ -57,7 +60,9 @@ github.com/stackrox/rox/sensor/kubernetes/localscanner / TestLocalScannerTLSIssu
 		j := junit2jira{
 			params: params{junitReportsDir: "testdata", JobName: "job-name", BuildId: "1", threshold: 3},
 		}
-		tests, err := j.findFailedTests()
+		testsSuites, err := junit.IngestDir(j.junitReportsDir)
+		assert.NoError(t, err)
+		tests, err := j.findFailedTests(testsSuites)
 		assert.NoError(t, err)
 
 		assert.ElementsMatch(
@@ -82,7 +87,9 @@ command-line-arguments / TestTimeout FAILED
 		j := junit2jira{
 			params: params{junitReportsDir: "testdata", BuildId: "1"},
 		}
-		tests, err := j.findFailedTests()
+		testsSuites, err := junit.IngestDir(j.junitReportsDir)
+		assert.NoError(t, err)
+		tests, err := j.findFailedTests(testsSuites)
 		assert.NoError(t, err)
 
 		assert.ElementsMatch(
@@ -158,7 +165,9 @@ command-line-arguments / TestTimeout FAILED
 		j := junit2jira{
 			params: params{junitReportsDir: "testdata/TEST-DefaultPoliciesTest.xml", BuildId: "1"},
 		}
-		tests, err := j.findFailedTests()
+		testsSuites, err := junit.IngestDir(j.junitReportsDir)
+		assert.NoError(t, err)
+		tests, err := j.findFailedTests(testsSuites)
 		assert.NoError(t, err)
 
 		assert.Equal(
@@ -278,4 +287,45 @@ waitForViolation(deploymentName,  policyName, 60)
 | JOB NAME     ||
 | ORCHESTRATOR ||
 `, actual)
+}
+
+func TestCsvOutput(t *testing.T) {
+	p := params{
+		BuildId:      "1",
+		JobName:      "comma ,",
+		Orchestrator: "test",
+		BuildTag:     "0.0.0",
+		BaseLink:     `quote "`,
+		BuildLink:    "buildLink",
+		timestamp:    "time",
+	}
+	buf := bytes.NewBufferString("")
+	testSuites, err := junit.IngestDir("testdata/TEST-DefaultPoliciesTest.xml")
+	assert.NoError(t, err)
+	err = junit2csv(testSuites, p, buf)
+	assert.NoError(t, err)
+
+	expected := `Timestamp,Classname,Name,Duration,Status,JobName,Orchestrator,BaseLink,BuildLink,BuildTag
+time,DefaultPoliciesTest,Verify policy Secure Shell (ssh) Port Exposed is triggered,161,passed,"comma ,",test,"quote """,buildLink,0.0.0
+time,DefaultPoliciesTest,Verify policy Latest tag is triggered,117,passed,"comma ,",test,"quote """,buildLink,0.0.0
+time,DefaultPoliciesTest,Verify policy Environment Variable Contains Secret is triggered,114,passed,"comma ,",test,"quote """,buildLink,0.0.0
+time,DefaultPoliciesTest,Verify policy Apache Struts: CVE-2017-5638 is triggered,264995,failed,"comma ,",test,"quote """,buildLink,0.0.0
+time,DefaultPoliciesTest,Verify policy Wget in Image is triggered,3267,passed,"comma ,",test,"quote """,buildLink,0.0.0
+time,DefaultPoliciesTest,Verify policy 90-Day Image Age is triggered,143,passed,"comma ,",test,"quote """,buildLink,0.0.0
+time,DefaultPoliciesTest,Verify policy Ubuntu Package Manager in Image is triggered,117,passed,"comma ,",test,"quote """,buildLink,0.0.0
+time,DefaultPoliciesTest,Verify policy Fixable CVSS >= 7 is triggered,3238,passed,"comma ,",test,"quote """,buildLink,0.0.0
+time,DefaultPoliciesTest,Verify policy Curl in Image is triggered,3262,passed,"comma ,",test,"quote """,buildLink,0.0.0
+time,DefaultPoliciesTest,Verify that Kubernetes Dashboard violation is generated,0,skipped,"comma ,",test,"quote """,buildLink,0.0.0
+time,DefaultPoliciesTest,Notifier for StackRox images with fixable vulns,0,skipped,"comma ,",test,"quote """,buildLink,0.0.0
+time,DefaultPoliciesTest,Verify risk factors on struts deployment: #riskFactor,0,skipped,"comma ,",test,"quote """,buildLink,0.0.0
+time,DefaultPoliciesTest,Verify that built-in services don't trigger unexpected alerts,0,skipped,"comma ,",test,"quote """,buildLink,0.0.0
+time,DefaultPoliciesTest,Verify that alert counts API is consistent with alerts,0,skipped,"comma ,",test,"quote """,buildLink,0.0.0
+time,DefaultPoliciesTest,Verify that alert groups API is consistent with alerts,0,skipped,"comma ,",test,"quote """,buildLink,0.0.0
+`
+	assert.Equal(t, expected, buf.String())
+
+	buf = bytes.NewBufferString("")
+	err = junit2csv(nil, p, buf)
+	assert.NoError(t, err)
+	assert.Equal(t, "Timestamp,Classname,Name,Duration,Status,JobName,Orchestrator,BaseLink,BuildLink,BuildTag\n", buf.String())
 }
