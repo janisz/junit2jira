@@ -305,27 +305,27 @@ func TestCsvOutput(t *testing.T) {
 	err = junit2csv(testSuites, p, buf)
 	assert.NoError(t, err)
 
-	expected := `Timestamp,Classname,Name,Duration,Status,JobName,Orchestrator,BaseLink,BuildLink,BuildTag
-time,DefaultPoliciesTest,Verify policy Secure Shell (ssh) Port Exposed is triggered,161,passed,"comma ,",test,"quote """,buildLink,0.0.0
-time,DefaultPoliciesTest,Verify policy Latest tag is triggered,117,passed,"comma ,",test,"quote """,buildLink,0.0.0
-time,DefaultPoliciesTest,Verify policy Environment Variable Contains Secret is triggered,114,passed,"comma ,",test,"quote """,buildLink,0.0.0
-time,DefaultPoliciesTest,Verify policy Apache Struts: CVE-2017-5638 is triggered,264995,failed,"comma ,",test,"quote """,buildLink,0.0.0
-time,DefaultPoliciesTest,Verify policy Wget in Image is triggered,3267,passed,"comma ,",test,"quote """,buildLink,0.0.0
-time,DefaultPoliciesTest,Verify policy 90-Day Image Age is triggered,143,passed,"comma ,",test,"quote """,buildLink,0.0.0
-time,DefaultPoliciesTest,Verify policy Ubuntu Package Manager in Image is triggered,117,passed,"comma ,",test,"quote """,buildLink,0.0.0
-time,DefaultPoliciesTest,Verify policy Fixable CVSS >= 7 is triggered,3238,passed,"comma ,",test,"quote """,buildLink,0.0.0
-time,DefaultPoliciesTest,Verify policy Curl in Image is triggered,3262,passed,"comma ,",test,"quote """,buildLink,0.0.0
-time,DefaultPoliciesTest,Verify that Kubernetes Dashboard violation is generated,0,skipped,"comma ,",test,"quote """,buildLink,0.0.0
-time,DefaultPoliciesTest,Notifier for StackRox images with fixable vulns,0,skipped,"comma ,",test,"quote """,buildLink,0.0.0
-time,DefaultPoliciesTest,Verify risk factors on struts deployment: #riskFactor,0,skipped,"comma ,",test,"quote """,buildLink,0.0.0
-time,DefaultPoliciesTest,Verify that built-in services don't trigger unexpected alerts,0,skipped,"comma ,",test,"quote """,buildLink,0.0.0
-time,DefaultPoliciesTest,Verify that alert counts API is consistent with alerts,0,skipped,"comma ,",test,"quote """,buildLink,0.0.0
-time,DefaultPoliciesTest,Verify that alert groups API is consistent with alerts,0,skipped,"comma ,",test,"quote """,buildLink,0.0.0
+	expected := `BuildId,Timestamp,Classname,Name,Duration,Status,JobName,BuildTag
+1,time,DefaultPoliciesTest,Verify policy Secure Shell (ssh) Port Exposed is triggered,161,passed,"comma ,",0.0.0
+1,time,DefaultPoliciesTest,Verify policy Latest tag is triggered,117,passed,"comma ,",0.0.0
+1,time,DefaultPoliciesTest,Verify policy Environment Variable Contains Secret is triggered,114,passed,"comma ,",0.0.0
+1,time,DefaultPoliciesTest,Verify policy Apache Struts: CVE-2017-5638 is triggered,264995,failed,"comma ,",0.0.0
+1,time,DefaultPoliciesTest,Verify policy Wget in Image is triggered,3267,passed,"comma ,",0.0.0
+1,time,DefaultPoliciesTest,Verify policy 90-Day Image Age is triggered,143,passed,"comma ,",0.0.0
+1,time,DefaultPoliciesTest,Verify policy Ubuntu Package Manager in Image is triggered,117,passed,"comma ,",0.0.0
+1,time,DefaultPoliciesTest,Verify policy Fixable CVSS >= 7 is triggered,3238,passed,"comma ,",0.0.0
+1,time,DefaultPoliciesTest,Verify policy Curl in Image is triggered,3262,passed,"comma ,",0.0.0
+1,time,DefaultPoliciesTest,Verify that Kubernetes Dashboard violation is generated,0,skipped,"comma ,",0.0.0
+1,time,DefaultPoliciesTest,Notifier for StackRox images with fixable vulns,0,skipped,"comma ,",0.0.0
+1,time,DefaultPoliciesTest,Verify risk factors on struts deployment: #riskFactor,0,skipped,"comma ,",0.0.0
+1,time,DefaultPoliciesTest,Verify that built-in services don't trigger unexpected alerts,0,skipped,"comma ,",0.0.0
+1,time,DefaultPoliciesTest,Verify that alert counts API is consistent with alerts,0,skipped,"comma ,",0.0.0
+1,time,DefaultPoliciesTest,Verify that alert groups API is consistent with alerts,0,skipped,"comma ,",0.0.0
 `
 	assert.Equal(t, expected, buf.String())
 
 	buf = bytes.NewBufferString("")
 	err = junit2csv(nil, p, buf)
 	assert.NoError(t, err)
-	assert.Equal(t, "Timestamp,Classname,Name,Duration,Status,JobName,Orchestrator,BaseLink,BuildLink,BuildTag\n", buf.String())
+	assert.Equal(t, "BuildId,Timestamp,Classname,Name,Duration,Status,JobName,BuildTag\n", buf.String())
 }
