@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/andygrunwald/go-jira v1.16.0
+	github.com/carlmjohnson/versioninfo v0.22.4
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/joshdk/go-junit v0.0.0-20210226021600-6145f504ca0d
 	github.com/pkg/errors v0.9.1

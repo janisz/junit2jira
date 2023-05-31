@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/andygrunwald/go-jira"
+	"github.com/carlmjohnson/versioninfo"
 	"github.com/hashicorp/go-multierror"
 	"github.com/joshdk/go-junit"
 	"github.com/pkg/errors"
@@ -40,7 +41,7 @@ func main() {
 	flag.StringVar(&p.BuildTag, "build-tag", "", "Built tag or revision.")
 	flag.StringVar(&p.JobName, "job-name", "", "Name of CI job.")
 	flag.StringVar(&p.Orchestrator, "orchestrator", "", "Orchestrator name (such as GKE or OpenShift), if any.")
-
+	versioninfo.AddFlag(flag.CommandLine)
 	flag.Parse()
 
 	err := run(p)
