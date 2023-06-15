@@ -10,8 +10,8 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"github.com/joshdk/go-junit"
 	"github.com/pkg/errors"
+	log "github.com/sirupsen/logrus"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -28,6 +28,7 @@ AND summary ~ %q
 ORDER BY created DESC`
 
 func main() {
+	var debug bool
 	p := params{}
 	flag.StringVar(&p.csvOutput, "csv-output", "", "Convert XML to a CSV file (use dash [-] for stdout)")
 	flag.StringVar(&p.jiraUrl, "jira-url", "https://issues.redhat.com/", "Url of JIRA instance")
@@ -41,8 +42,13 @@ func main() {
 	flag.StringVar(&p.BuildTag, "build-tag", "", "Built tag or revision.")
 	flag.StringVar(&p.JobName, "job-name", "", "Name of CI job.")
 	flag.StringVar(&p.Orchestrator, "orchestrator", "", "Orchestrator name (such as GKE or OpenShift), if any.")
+	flag.BoolVar(&debug, "debug", false, "Enable debug log level")
 	versioninfo.AddFlag(flag.CommandLine)
 	flag.Parse()
+
+	if debug {
+		log.SetLevel(log.DebugLevel)
+	}
 
 	err := run(p)
 	if err != nil {
@@ -54,6 +60,11 @@ type junit2jira struct {
 	params
 	jiraClient *jira.Client
 }
+
+const (
+	SUMMARY = "summary"
+	ID      = "ID"
+)
 
 func run(p params) error {
 	transport := http.DefaultTransport
@@ -131,7 +142,8 @@ func (j junit2jira) createIssueOrComment(tc testCase) error {
 	if err != nil {
 		return fmt.Errorf("could not get description: %w", err)
 	}
-	log.Println("Searching for ", summary)
+	const NA = "?"
+	logEntry(NA, summary).Debug("Searching for issue")
 	search, response, err := j.jiraClient.Issue.Search(fmt.Sprintf(jql, summary), nil)
 	if err != nil {
 		logError(err, response)
@@ -141,13 +153,9 @@ func (j junit2jira) createIssueOrComment(tc testCase) error {
 	issue := findMatchingIssue(search, summary)
 
 	if issue == nil {
-		log.Println("Issue not found. Creating new issue...")
-		log.Println(summary)
-		log.Println(description)
+		logEntry(NA, summary).Info("Issue not found. Creating new issue...")
 		if j.dryRun {
-			log.Println("Dry run: will just print issue content")
-			log.Println(summary)
-			log.Println(description)
+			logEntry(NA, summary).Debugf("Dry run: will just print issue\n %q", description)
 			return nil
 		}
 		create, response, err := j.jiraClient.Issue.Create(newIssue(summary, description))
@@ -155,7 +163,7 @@ func (j junit2jira) createIssueOrComment(tc testCase) error {
 			logError(err, response)
 			return fmt.Errorf("could not create issue %s: %w", summary, err)
 		}
-		log.Printf("Created new issues: %s:%s", create.Key, summary)
+		logEntry(create.Key, summary).Info("Created new issue")
 		return nil
 	}
 
@@ -163,11 +171,10 @@ func (j junit2jira) createIssueOrComment(tc testCase) error {
 		Body: description,
 	}
 
-	log.Printf("Found issue: %s %s. Creating a coment...", issue.ID, issue.Fields.Summary)
+	logEntry(issue.ID, issue.Fields.Summary).Info("Found issue. Creating a comment...")
 
 	if j.dryRun {
-		log.Println("Dry run: will just print comment")
-		log.Println(description)
+		logEntry(NA, issue.Fields.Summary).Debugf("Dry run: will just print comment:\n%q", description)
 		return nil
 	}
 
@@ -176,8 +183,13 @@ func (j junit2jira) createIssueOrComment(tc testCase) error {
 		logError(err, response)
 		return fmt.Errorf("could not create issue %s: %w", summary, err)
 	}
-	log.Printf("Created comment %s for %s:%s ", addComment.ID, issue.Key, summary)
+	logEntry(issue.Key, summary).Infof("Created comment %s", addComment.ID)
 	return nil
+}
+
+func logEntry(id, summary string) *log.Entry {
+
+	return log.WithField("ID", id).WithField("summary", summary)
 }
 
 func newIssue(summary string, description string) *jira.Issue {
@@ -205,14 +217,13 @@ func findMatchingIssue(search []jira.Issue, summary string) *jira.Issue {
 	return nil
 }
 
-func logError(err error, response *jira.Response) {
-	log.Println(err)
-	log.Println(response.StatusCode)
+func logError(e error, response *jira.Response) {
 	all, err := io.ReadAll(response.Body)
+
 	if err != nil {
-		log.Println("Could not read body", err)
+		log.WithError(e).WithField("StatusCode", response.StatusCode).Errorf("Could not read body: %q", err)
 	} else {
-		log.Println(string(all))
+		log.WithError(e).WithField("StatusCode", response.StatusCode).Error(string(all))
 	}
 }
 
@@ -268,7 +279,7 @@ func (j junit2jira) findFailedTests(testSuites []junit.Suite) ([]testCase, error
 			failedTests = j.addFailedTest(failedTests, tc)
 		}
 	}
-	log.Printf("Found %d failed tests", len(failedTests))
+	log.Infof("Found %d failed tests", len(failedTests))
 
 	if len(failedTests) > j.threshold && j.threshold > 0 {
 		return j.mergeFailedTests(failedTests)
@@ -278,7 +289,7 @@ func (j junit2jira) findFailedTests(testSuites []junit.Suite) ([]testCase, error
 }
 
 func (j junit2jira) mergeFailedTests(failedTests []testCase) ([]testCase, error) {
-	log.Println("Too many failed tests, reporting them as a one failure.")
+	log.Warning("Too many failed tests, reporting them as a one failure.")
 	msg := ""
 	suite := failedTests[0].Suite
 	for _, t := range failedTests {
