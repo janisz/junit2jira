@@ -28,6 +28,8 @@ Usage of junit2jira:
     	Convert XML to a CSV file (use dash [-] for stdout)
   -dry-run
     	When set to true issues will NOT be created.
+  -html-output string
+    	Generate HTML report (use dash [-] for stdout)
   -jira-url string
     	Url of JIRA instance (default "https://issues.redhat.com/")
   -job-name string
@@ -40,6 +42,9 @@ Usage of junit2jira:
     	Number of reported failures that should cause single issue creation. (default 10)
   -timestamp string
     	Timestamp of CI test. (default "2023-04-18T12:07:44+02:00")
+  -v	short alias for -version
+  -version
+    	print version information and exit
 ```
 
 ## Example usage
