@@ -2,8 +2,10 @@ package main
 
 import (
 	"bytes"
+	"github.com/andygrunwald/go-jira"
 	"github.com/joshdk/go-junit"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"testing"
 )
 
@@ -328,4 +330,37 @@ func TestCsvOutput(t *testing.T) {
 	err = junit2csv(nil, p, buf)
 	assert.NoError(t, err)
 	assert.Equal(t, "BuildId,Timestamp,Classname,Name,Duration,Status,JobName,BuildTag\n", buf.String())
+}
+
+func TestHtmlOutput(t *testing.T) {
+	j := junit2jira{params: params{jiraUrl: "https://issues.redhat.com/"}}
+
+	buf := bytes.NewBufferString("")
+	require.NoError(t, j.renderHtml(nil, buf))
+
+	issues := []*jira.Issue{
+		{Key: "ROX-1", Fields: &jira.IssueFields{Summary: "abc"}},
+		{Key: "ROX-2", Fields: &jira.IssueFields{Summary: "def"}},
+		{Key: "ROX-3"},
+	}
+	buf = bytes.NewBufferString("")
+	require.NoError(t, j.renderHtml(issues, buf))
+
+	assert.Equal(t, `<html>
+    <head>
+        <title><h4>Possible Flake Tests</h4></title>
+        <style>
+          body { color: #e8e8e8; background-color: #424242; font-family: "Roboto", "Helvetica", "Arial", sans-serif }
+          a { color: #ff8caa }
+          a:visited { color: #ff8caa }
+        </style>
+    </head>
+    <body>
+    <ul>
+        <li><a target=_blank href="https://issues.redhat.com/browse/ROX-1">ROX-1: abc</a>
+        <li><a target=_blank href="https://issues.redhat.com/browse/ROX-2">ROX-2: def</a>
+        <li><a target=_blank href="https://issues.redhat.com/browse/ROX-3">ROX-3: </a>
+    </ul>
+  </body>
+</html>`, buf.String())
 }
