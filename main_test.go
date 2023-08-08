@@ -2,8 +2,12 @@ package main
 
 import (
 	"bytes"
+	_ "embed"
+	"github.com/andygrunwald/go-jira"
 	"github.com/joshdk/go-junit"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+	"net/url"
 	"testing"
 )
 
@@ -328,4 +332,26 @@ func TestCsvOutput(t *testing.T) {
 	err = junit2csv(nil, p, buf)
 	assert.NoError(t, err)
 	assert.Equal(t, "BuildId,Timestamp,Classname,Name,Duration,Status,JobName,BuildTag\n", buf.String())
+}
+
+//go:embed testdata/expected-html-output.html
+var expectedHtmlOutput string
+
+func TestHtmlOutput(t *testing.T) {
+	u, err := url.Parse("https://issues.redhat.com")
+	assert.NoError(t, err)
+	j := junit2jira{params: params{jiraUrl: u}}
+
+	buf := bytes.NewBufferString("")
+	require.NoError(t, j.renderHtml(nil, buf))
+
+	issues := []*jira.Issue{
+		{Key: "ROX-1", Fields: &jira.IssueFields{Summary: "abc"}},
+		{Key: "ROX-2", Fields: &jira.IssueFields{Summary: "def"}},
+		{Key: "ROX-3"},
+	}
+	buf = bytes.NewBufferString("")
+	require.NoError(t, j.renderHtml(issues, buf))
+
+	assert.Equal(t, expectedHtmlOutput, buf.String())
 }
