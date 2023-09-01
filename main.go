@@ -9,7 +9,7 @@ import (
 	"github.com/andygrunwald/go-jira"
 	"github.com/carlmjohnson/versioninfo"
 	"github.com/hashicorp/go-multierror"
-	"github.com/joshdk/go-junit"
+	junit "github.com/joshdk/go-junit"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 	"html/template"
@@ -109,6 +109,10 @@ func run(p params) error {
 	if err != nil {
 		return errors.Wrap(err, "could not create issues or comments")
 	}
+	err = j.linkIssues(issues)
+	if err != nil {
+		return errors.Wrap(err, "could not link issues")
+	}
 	return errors.Wrap(j.createHtml(issues), "could not create HTML report")
 }
 
@@ -180,6 +184,27 @@ func (j junit2jira) createIssuesOrComments(failedTests []testCase) ([]*jira.Issu
 		}
 	}
 	return issues, result
+}
+
+func (j junit2jira) linkIssues(issues []*jira.Issue) error {
+	const linkType = "Related" // link type may vay between jira versions and configurations
+
+	var result error
+	for x, issue := range issues {
+		for y := 0; y < x; y++ {
+			_, err := j.jiraClient.Issue.AddLink(&jira.IssueLink{
+				Type:         jira.IssueLinkType{Name: linkType},
+				OutwardIssue: &jira.Issue{Key: issue.Key},
+				InwardIssue:  &jira.Issue{Key: issues[y].Key},
+			})
+			if err != nil {
+				result = multierror.Append(result, err)
+				continue
+			}
+			log.WithField("ID", issue.Key).Debugf("Created link to %s", issues[y].Key)
+		}
+	}
+	return result
 }
 
 func (j junit2jira) createIssueOrComment(tc testCase) (*jira.Issue, error) {
