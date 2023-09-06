@@ -26,6 +26,8 @@ Usage of junit2jira:
     	Built tag or revision.
   -csv-output string
     	Convert XML to a CSV file (use dash [-] for stdout)
+  -debug
+    	Enable debug log level
   -dry-run
     	When set to true issues will NOT be created.
   -html-output string
@@ -38,10 +40,12 @@ Usage of junit2jira:
     	Dir that contains jUnit reports XML files
   -orchestrator string
     	Orchestrator name (such as GKE or OpenShift), if any.
+  -slack-output string
+    	Generate JSON output in slack format (use dash [-] for stdout)
   -threshold int
     	Number of reported failures that should cause single issue creation. (default 10)
   -timestamp string
-    	Timestamp of CI test. (default "2023-04-18T12:07:44+02:00")
+    	Timestamp of CI test. (default "2023-09-04T17:50:36+02:00")
   -v	short alias for -version
   -version
     	print version information and exit

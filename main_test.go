@@ -19,7 +19,7 @@ func TestParseJunitReport(t *testing.T) {
 	})
 	t.Run("golang", func(t *testing.T) {
 		j := junit2jira{
-			params: params{junitReportsDir: "testdata/report.xml"},
+			params: params{junitReportsDir: "testdata/jira/report.xml"},
 		}
 		testsSuites, err := junit.IngestDir(j.junitReportsDir)
 		assert.NoError(t, err)
@@ -44,7 +44,7 @@ func TestParseJunitReport(t *testing.T) {
 	})
 	t.Run("golang with threshold", func(t *testing.T) {
 		j := junit2jira{
-			params: params{junitReportsDir: "testdata/report.xml", JobName: "job-name", threshold: 1},
+			params: params{junitReportsDir: "testdata/jira/report.xml", JobName: "job-name", threshold: 1},
 		}
 		testsSuites, err := junit.IngestDir(j.junitReportsDir)
 		assert.NoError(t, err)
@@ -62,7 +62,7 @@ github.com/stackrox/rox/sensor/kubernetes/localscanner / TestLocalScannerTLSIssu
 	})
 	t.Run("dir multiple suites with threshold", func(t *testing.T) {
 		j := junit2jira{
-			params: params{junitReportsDir: "testdata", JobName: "job-name", BuildId: "1", threshold: 3},
+			params: params{junitReportsDir: "testdata/jira", JobName: "job-name", BuildId: "1", threshold: 3},
 		}
 		testsSuites, err := junit.IngestDir(j.junitReportsDir)
 		assert.NoError(t, err)
@@ -89,7 +89,7 @@ command-line-arguments / TestTimeout FAILED
 	})
 	t.Run("dir", func(t *testing.T) {
 		j := junit2jira{
-			params: params{junitReportsDir: "testdata", BuildId: "1"},
+			params: params{junitReportsDir: "testdata/jira", BuildId: "1"},
 		}
 		testsSuites, err := junit.IngestDir(j.junitReportsDir)
 		assert.NoError(t, err)
@@ -167,7 +167,7 @@ command-line-arguments / TestTimeout FAILED
 	})
 	t.Run("gradle", func(t *testing.T) {
 		j := junit2jira{
-			params: params{junitReportsDir: "testdata/TEST-DefaultPoliciesTest.xml", BuildId: "1"},
+			params: params{junitReportsDir: "testdata/jira/TEST-DefaultPoliciesTest.xml", BuildId: "1"},
 		}
 		testsSuites, err := junit.IngestDir(j.junitReportsDir)
 		assert.NoError(t, err)
@@ -304,7 +304,7 @@ func TestCsvOutput(t *testing.T) {
 		timestamp:    "time",
 	}
 	buf := bytes.NewBufferString("")
-	testSuites, err := junit.IngestDir("testdata/TEST-DefaultPoliciesTest.xml")
+	testSuites, err := junit.IngestDir("testdata/jira/TEST-DefaultPoliciesTest.xml")
 	assert.NoError(t, err)
 	err = junit2csv(testSuites, p, buf)
 	assert.NoError(t, err)
@@ -334,7 +334,7 @@ func TestCsvOutput(t *testing.T) {
 	assert.Equal(t, "BuildId,Timestamp,Classname,Name,Duration,Status,JobName,BuildTag\n", buf.String())
 }
 
-//go:embed testdata/expected-html-output.html
+//go:embed testdata/jira/expected-html-output.html
 var expectedHtmlOutput string
 
 func TestHtmlOutput(t *testing.T) {
