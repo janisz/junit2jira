@@ -4,6 +4,7 @@ import (
 	_ "embed"
 	"encoding/json"
 	"fmt"
+	"github.com/andygrunwald/go-jira"
 	"github.com/joshdk/go-junit"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -42,7 +43,19 @@ func TestConstructSlackMessage(t *testing.T) {
 			assert.NoError(t, err, "If this fails, it probably indicates a problem with the sample junit report rather than the code")
 			assert.NotNil(t, suites, "If this fails, it probably indicates a problem with the sample junit report rather than the code")
 
-			blocks := convertJunitToSlack(suites...)
+			issues := make([]*testIssue, 0, len(suites))
+			for _, s := range suites {
+				issues = append(issues, &testIssue{
+					issue:    nil,
+					testCase: s,
+				})
+			}
+			issues[0].issue = &jira.Issue{
+				Self: "some/url/foo-1",
+				Key:  "FOO-1",
+			}
+
+			blocks := convertJunitToSlack(issues...)
 			b, err := json.MarshalIndent(blocks, "", "  ")
 			assert.NoError(t, err)
 			assert.JSONEq(t, string(expectations[i]), string(b))

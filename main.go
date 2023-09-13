@@ -76,6 +76,11 @@ type junit2jira struct {
 	jiraClient *jira.Client
 }
 
+type testIssue struct {
+	issue    *jira.Issue
+	testCase testCase
+}
+
 func run(p params) error {
 	transport := http.DefaultTransport
 
@@ -108,25 +113,31 @@ func run(p params) error {
 	if err != nil {
 		return errors.Wrap(err, "could not find failed tests")
 	}
-	err = j.createSlackMessage(failedTests)
-	if err != nil {
-		return errors.Wrap(err, "could not convert to slack")
-	}
 	issues, err := j.createIssuesOrComments(failedTests)
 	if err != nil {
 		return errors.Wrap(err, "could not create issues or comments")
 	}
-	err = j.linkIssues(issues)
+	err = j.createSlackMessage(issues)
+	if err != nil {
+		return errors.Wrap(err, "could not convert to slack")
+	}
+
+	jiraIssues := make([]*jira.Issue, 0, len(issues))
+	for _, i := range issues {
+		jiraIssues = append(jiraIssues, i.issue)
+	}
+
+	err = j.linkIssues(jiraIssues)
 	if err != nil {
 		return errors.Wrap(err, "could not link issues")
 	}
-	return errors.Wrap(j.createHtml(issues), "could not create HTML report")
+	return errors.Wrap(j.createHtml(jiraIssues), "could not create HTML report")
 }
 
 //go:embed htmlOutput.html.tpl
 var htmlOutputTemplate string
 
-func (j junit2jira) createSlackMessage(tc []testCase) error {
+func (j junit2jira) createSlackMessage(tc []*testIssue) error {
 	if j.slackOutput == "" {
 		return nil
 	}
@@ -207,9 +218,9 @@ func (j junit2jira) createCsv(testSuites []junit.Suite) error {
 	return junit2csv(testSuites, j.params, out)
 }
 
-func (j junit2jira) createIssuesOrComments(failedTests []testCase) ([]*jira.Issue, error) {
+func (j junit2jira) createIssuesOrComments(failedTests []testCase) ([]*testIssue, error) {
 	var result error
-	issues := make([]*jira.Issue, 0, len(failedTests))
+	issues := make([]*testIssue, 0, len(failedTests))
 	for _, tc := range failedTests {
 		issue, err := j.createIssueOrComment(tc)
 		if err != nil {
@@ -243,7 +254,7 @@ func (j junit2jira) linkIssues(issues []*jira.Issue) error {
 	return result
 }
 
-func (j junit2jira) createIssueOrComment(tc testCase) (*jira.Issue, error) {
+func (j junit2jira) createIssueOrComment(tc testCase) (*testIssue, error) {
 	summary, err := tc.summary()
 	if err != nil {
 		return nil, fmt.Errorf("could not get summary: %w", err)
@@ -261,6 +272,10 @@ func (j junit2jira) createIssueOrComment(tc testCase) (*jira.Issue, error) {
 	}
 
 	issue := findMatchingIssue(search, summary)
+	issueWithTestCase := testIssue{
+		issue:    issue,
+		testCase: tc,
+	}
 
 	if issue == nil {
 		logEntry(NA, summary).Info("Issue not found. Creating new issue...")
@@ -274,7 +289,8 @@ func (j junit2jira) createIssueOrComment(tc testCase) (*jira.Issue, error) {
 			return nil, fmt.Errorf("could not create issue %s: %w", summary, err)
 		}
 		logEntry(create.Key, summary).Info("Created new issue")
-		return create, nil
+		issueWithTestCase.issue = create
+		return &issueWithTestCase, nil
 	}
 
 	comment := jira.Comment{
@@ -285,7 +301,7 @@ func (j junit2jira) createIssueOrComment(tc testCase) (*jira.Issue, error) {
 
 	if j.dryRun {
 		logEntry(NA, issue.Fields.Summary).Debugf("Dry run: will just print comment:\n%q", description)
-		return issue, nil
+		return &issueWithTestCase, nil
 	}
 
 	addComment, response, err := j.jiraClient.Issue.AddComment(issue.ID, &comment)
@@ -294,7 +310,7 @@ func (j junit2jira) createIssueOrComment(tc testCase) (*jira.Issue, error) {
 		return nil, fmt.Errorf("could not create issue %s: %w", summary, err)
 	}
 	logEntry(issue.Key, summary).Infof("Created comment %s", addComment.ID)
-	return issue, nil
+	return &issueWithTestCase, nil
 }
 
 func logEntry(id, summary string) *log.Entry {
@@ -608,19 +624,25 @@ func truncateSummary(s string) string {
 	return s
 }
 
-func convertJunitToSlack(testCases ...testCase) []slack.Attachment {
+func convertJunitToSlack(issues ...*testIssue) []slack.Attachment {
 	var failedTestsBlocks []slack.Block
 	var attachments []slack.Attachment
 
-	for _, tc := range testCases {
+	for _, i := range issues {
 		var title string
+		tc := i.testCase
 		if tc.Suite == "" {
 			title = tc.Name
 		} else {
 			title = fmt.Sprintf("%s: %s", tc.Suite, tc.Name)
 		}
 
-		titleTextBlock := slack.NewTextBlockObject("plain_text", title, false, false)
+		issue := i.issue
+		if issue != nil {
+			title = fmt.Sprintf("[**%s**](%s): %s", issue.Key, issue.Self, title)
+		}
+
+		titleTextBlock := slack.NewTextBlockObject("mrkdwn", title, false, false)
 		titleSectionBlock := slack.NewSectionBlock(titleTextBlock, nil, nil)
 		failedTestsBlocks = append(failedTestsBlocks, titleSectionBlock)
 
@@ -678,7 +700,7 @@ func failureToAttachment(title string, tc testCase) (slack.Attachment, error) {
 	}
 
 	// Add some formatting to the failure title
-	failureTitleTextBlock := slack.NewTextBlockObject("plain_text", title, false, false)
+	failureTitleTextBlock := slack.NewTextBlockObject("mrkdwn", title, false, false)
 	failureTitleHeaderBlock := slack.NewHeaderBlock(failureTitleTextBlock)
 
 	failureAttachment := slack.Attachment{

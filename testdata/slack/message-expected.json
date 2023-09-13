@@ -12,8 +12,8 @@
       {
         "type": "section",
         "text": {
-          "type": "plain_text",
-          "text": "MyTest: My Test Case 3"
+          "type": "mrkdwn",
+          "text": "[**FOO-1**](some/url/foo-1): MyTest: My Test Case 3"
         }
       }
     ]
@@ -24,8 +24,8 @@
       {
         "type": "header",
         "text": {
-          "type": "plain_text",
-          "text": "MyTest: My Test Case 3"
+          "type": "mrkdwn",
+          "text": "[**FOO-1**](some/url/foo-1): MyTest: My Test Case 3"
         }
       },
       {
