@@ -26,7 +26,7 @@ import (
 )
 
 const (
-	jql = `project in (ROX)
+	jql = `project in (%s)
 AND issuetype = Bug
 AND status != Closed
 AND labels = CI_Failure
@@ -46,6 +46,7 @@ func main() {
 	flag.StringVar(&p.htmlOutput, "html-output", "", "Generate HTML report to this file (use dash [-] for stdout)")
 	flag.StringVar(&p.csvOutput, "csv-output", "", "Convert XML to a CSV file (use dash [-] for stdout)")
 	flag.StringVar(&jiraUrl, "jira-url", "https://issues.redhat.com/", "Url of JIRA instance")
+	flag.StringVar(&p.jiraProject, "jira-project", "ROX", "The JIRA project for issues")
 	flag.StringVar(&p.junitReportsDir, "junit-reports-dir", os.Getenv("ARTIFACT_DIR"), "Dir that contains jUnit reports XML files")
 	flag.BoolVar(&p.dryRun, "dry-run", false, "When set to true issues will NOT be created.")
 	flag.IntVar(&p.threshold, "threshold", 10, "Number of reported failures that should cause single issue creation.")
@@ -271,7 +272,7 @@ func (j junit2jira) createIssueOrComment(tc testCase) (*testIssue, error) {
 	}
 	const NA = "?"
 	logEntry(NA, summary).Debug("Searching for issue")
-	search, response, err := j.jiraClient.Issue.Search(fmt.Sprintf(jql, summary), nil)
+	search, response, err := j.jiraClient.Issue.Search(fmt.Sprintf(jql, j.jiraProject, summary), nil)
 	if err != nil {
 		logError(err, response)
 		return nil, fmt.Errorf("could not search: %w", err)
@@ -531,6 +532,7 @@ type params struct {
 	threshold       int
 	dryRun          bool
 	jiraUrl         *url.URL
+	jiraProject     string
 	junitReportsDir string
 	timestamp       string
 	csvOutput       string
