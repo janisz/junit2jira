@@ -290,7 +290,7 @@ func (j junit2jira) createIssueOrComment(tc testCase) (*testIssue, error) {
 			logEntry(NA, summary).Debugf("Dry run: will just print issue\n %q", description)
 			return nil, nil
 		}
-		create, response, err := j.jiraClient.Issue.Create(newIssue(summary, description))
+		create, response, err := j.jiraClient.Issue.Create(newIssue(j.jiraProject, summary, description))
 		if response != nil && err != nil {
 			logError(err, response)
 			return nil, fmt.Errorf("could not create issue %s: %w", summary, err)
@@ -325,14 +325,14 @@ func logEntry(id, summary string) *log.Entry {
 	return log.WithField("ID", id).WithField("summary", summary)
 }
 
-func newIssue(summary string, description string) *jira.Issue {
+func newIssue(project string, summary string, description string) *jira.Issue {
 	return &jira.Issue{
 		Fields: &jira.IssueFields{
 			Type: jira.IssueType{
 				Name: "Bug",
 			},
 			Project: jira.Project{
-				Key: "ROX",
+				Key: project,
 			},
 			Summary:     summary,
 			Description: description,
