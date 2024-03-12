@@ -1,0 +1,67 @@
+<testsuites name="" tests="0" failures="0" time="2115.358">
+    <testsuite tests="0" failures="0" timestamp="2024-03-11T09:19:35.250138536+01:00" time="0.000" name="./tests/central">
+        <testsuite tests="11" failures="0" timestamp="2024-03-11T09:19:35.257557888+01:00" time="" name="central-basic">
+            <testcase classname="central-basic" name="setup" timestamp="2024-03-11T09:19:35.257558192+01:00" time="0.000" assertions="0"/>
+            <testcase classname="central-basic" name="step 0-image-pull-secrets" timestamp="2024-03-11T09:19:35.546319474+01:00" time="0.000" assertions="0"/>
+            <testcase classname="central-basic" name="step 10-central-cr" timestamp="2024-03-11T09:19:36.595834267+01:00" time="0.000" assertions="12"/>
+            <testcase classname="central-basic" name="step 11-" timestamp="2024-03-11T09:22:50.907680332+01:00" time="0.000" assertions="3"/>
+            <testcase classname="central-basic" name="step 20-verify-password" timestamp="2024-03-11T09:22:51.817070984+01:00" time="0.000" assertions="0"/>
+            <testcase classname="central-basic" name="step 30-change-password" timestamp="2024-03-11T09:22:53.710940889+01:00" time="0.000" assertions="0"/>
+            <testcase classname="central-basic" name="step 40-reconcile" timestamp="2024-03-11T09:22:54.471988804+01:00" time="0.000" assertions="2"/>
+            <testcase classname="central-basic" name="step 60-use-new-password" timestamp="2024-03-11T09:24:27.54231141+01:00" time="0.000" assertions="0"/>
+            <testcase classname="central-basic" name="step 75-switch-to-external-central-db" timestamp="2024-03-11T09:24:29.65030348+01:00" time="0.000" assertions="3"/>
+            <testcase classname="central-basic" name="step 76-switch-back-to-internal-central-db" timestamp="2024-03-11T09:25:30.568030169+01:00" time="0.000" assertions="8"/>
+            <testcase classname="central-basic" name="step 90-activate-scanner-v4" timestamp="2024-03-11T09:28:51.267096088+01:00" time="0.000" assertions="10">
+                <failure message="failed in step 90-activate-scanner-v4" type="">resource PersistentVolumeClaim:kuttl-test-apparent-gelding/scanner-v4-db: .spec.accessModes: value mismatch, expected: ReadWriteOncex != actual: ReadWriteOnce</failure>
+            </testcase>
+        </testsuite>
+        <testsuite tests="15" failures="0" timestamp="2024-03-11T09:19:35.261230002+01:00" time="" name="central-misc">
+            <testcase classname="central-misc" name="setup" timestamp="2024-03-11T09:19:35.261230219+01:00" time="0.000" assertions="0"/>
+            <testcase classname="central-misc" name="step 0-image-pull-secrets" timestamp="2024-03-11T09:19:35.526829403+01:00" time="0.000" assertions="0"/>
+            <testcase classname="central-misc" name="step 10-central-cr" timestamp="2024-03-11T09:19:36.596963264+01:00" time="0.000" assertions="12"/>
+            <testcase classname="central-misc" name="step 11-" timestamp="2024-03-11T09:23:09.391105115+01:00" time="0.000" assertions="1"/>
+            <testcase classname="central-misc" name="step 40-enable-declarative-config" timestamp="2024-03-11T09:23:10.509766935+01:00" time="0.000" assertions="7"/>
+            <testcase classname="central-misc" name="step 41-disable-declarative-config" timestamp="2024-03-11T09:24:43.52599129+01:00" time="0.000" assertions="7"/>
+            <testcase classname="central-misc" name="step 61-set-expose-monitoring" timestamp="2024-03-11T09:26:05.0306941+01:00" time="0.000" assertions="10"/>
+            <testcase classname="central-misc" name="step 62-" timestamp="2024-03-11T09:28:41.125375569+01:00" time="0.000" assertions="1"/>
+            <testcase classname="central-misc" name="step 63-unset-expose-monitoring" timestamp="2024-03-11T09:28:42.090536955+01:00" time="0.000" assertions="10"/>
+            <testcase classname="central-misc" name="step 64-" timestamp="2024-03-11T09:30:16.290671474+01:00" time="0.000" assertions="1"/>
+            <testcase classname="central-misc" name="step 80-enable-telemetry" timestamp="2024-03-11T09:30:17.522745147+01:00" time="0.000" assertions="7"/>
+            <testcase classname="central-misc" name="step 81-disable-telemetry" timestamp="2024-03-11T09:30:43.839958948+01:00" time="0.000" assertions="7"/>
+            <testcase classname="central-misc" name="step 85-add-additional-ca" timestamp="2024-03-11T09:31:50.195464314+01:00" time="0.000" assertions="7"/>
+            <testcase classname="central-misc" name="step 900-delete-cr" timestamp="2024-03-11T09:32:17.639280434+01:00" time="0.000" assertions="88"/>
+            <testcase classname="central-misc" name="step 990-" timestamp="2024-03-11T09:33:08.988074197+01:00" time="0.000" assertions="10"/>
+        </testsuite>
+    </testsuite>
+    <testsuite tests="0" failures="0" timestamp="2024-03-11T09:19:35.250178094+01:00" time="0.000" name="./tests/controller">
+        <testsuite tests="3" failures="0" timestamp="2024-03-11T09:19:35.252150775+01:00" time="" name="metrics">
+            <testcase classname="metrics" name="setup" timestamp="2024-03-11T09:19:35.252151087+01:00" time="0.000" assertions="0"/>
+            <testcase classname="metrics" name="step 100-rbac" timestamp="2024-03-11T09:19:35.536421893+01:00" time="0.000" assertions="0"/>
+            <testcase classname="metrics" name="step 200-access-no-auth" timestamp="2024-03-11T09:19:37.34609883+01:00" time="0.000" assertions="4"/>
+        </testsuite>
+    </testsuite>
+    <testsuite tests="0" failures="0" timestamp="2024-03-11T09:19:35.250189349+01:00" time="0.000" name="./tests/securedcluster">
+        <testsuite tests="20" failures="0" timestamp="2024-03-11T09:19:35.257858536+01:00" time="" name="sc-basic">
+            <testcase classname="sc-basic" name="setup" timestamp="2024-03-11T09:19:35.257858714+01:00" time="0.000" assertions="0"/>
+            <testcase classname="sc-basic" name="step 0-image-pull-secrets" timestamp="2024-03-11T09:19:35.528730355+01:00" time="0.000" assertions="0"/>
+            <testcase classname="sc-basic" name="step 5-central-cr" timestamp="2024-03-11T09:19:36.586298814+01:00" time="0.000" assertions="6"/>
+            <testcase classname="sc-basic" name="step 7-fetch-bundle" timestamp="2024-03-11T09:22:14.172876559+01:00" time="0.000" assertions="3"/>
+            <testcase classname="sc-basic" name="step 10-secured-cluster-cr" timestamp="2024-03-11T09:22:19.133516061+01:00" time="0.000" assertions="5"/>
+            <testcase classname="sc-basic" name="step 12-" timestamp="2024-03-11T09:23:31.889693826+01:00" time="0.000" assertions="0"/>
+            <testcase classname="sc-basic" name="step 13-" timestamp="2024-03-11T09:23:31.889764064+01:00" time="0.000" assertions="0"/>
+            <testcase classname="sc-basic" name="step 14-" timestamp="2024-03-11T09:23:31.889797675+01:00" time="0.000" assertions="0"/>
+            <testcase classname="sc-basic" name="step 15-" timestamp="2024-03-11T09:23:31.889831734+01:00" time="0.000" assertions="0"/>
+            <testcase classname="sc-basic" name="step 16-" timestamp="2024-03-11T09:23:31.889880701+01:00" time="0.000" assertions="0"/>
+            <testcase classname="sc-basic" name="step 20-try-change-cluster-name" timestamp="2024-03-11T09:23:31.889904131+01:00" time="0.000" assertions="1"/>
+            <testcase classname="sc-basic" name="step 30-change-cluster-name-back" timestamp="2024-03-11T09:23:32.933877824+01:00" time="0.000" assertions="5"/>
+            <testcase classname="sc-basic" name="step 40-enable-monitoring" timestamp="2024-03-11T09:23:55.205576704+01:00" time="0.000" assertions="1"/>
+            <testcase classname="sc-basic" name="step 41-" timestamp="2024-03-11T09:23:57.721971599+01:00" time="0.000" assertions="5"/>
+            <testcase classname="sc-basic" name="step 42-disable-monitoring" timestamp="2024-03-11T09:23:59.744647568+01:00" time="0.000" assertions="1"/>
+            <testcase classname="sc-basic" name="step 43-" timestamp="2024-03-11T09:25:02.021906203+01:00" time="0.000" assertions="5"/>
+            <testcase classname="sc-basic" name="step 900-delete-central-cr" timestamp="2024-03-11T09:25:21.262558079+01:00" time="0.000" assertions="2"/>
+            <testcase classname="sc-basic" name="step 910-" timestamp="2024-03-11T09:26:07.586210014+01:00" time="0.000" assertions="1"/>
+            <testcase classname="sc-basic" name="step 950-delete-secured-cluster-cr" timestamp="2024-03-11T09:27:04.476050533+01:00" time="0.000" assertions="71"/>
+            <testcase classname="sc-basic" name="step 990-" timestamp="2024-03-11T09:27:30.877137376+01:00" time="0.000" assertions="10"/>
+        </testsuite>
+    </testsuite>
+</testsuites>

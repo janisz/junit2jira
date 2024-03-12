@@ -405,12 +405,7 @@ func junit2csv(testSuites []junit.Suite, p params, output io.Writer) error {
 func (j junit2jira) findFailedTests(testSuites []junit.Suite) ([]testCase, error) {
 	failedTests := make([]testCase, 0)
 	for _, ts := range testSuites {
-		for _, tc := range ts.Tests {
-			if tc.Error == nil {
-				continue
-			}
-			failedTests = j.addFailedTest(failedTests, tc)
-		}
+		failedTests = j.addFailedTests(ts, failedTests)
 	}
 	log.Infof("Found %d failed tests", len(failedTests))
 
@@ -419,6 +414,19 @@ func (j junit2jira) findFailedTests(testSuites []junit.Suite) ([]testCase, error
 	}
 
 	return failedTests, nil
+}
+
+func (j junit2jira) addFailedTests(ts junit.Suite, failedTests []testCase) []testCase {
+	for _, suite := range ts.Suites {
+		failedTests = j.addFailedTests(suite, failedTests)
+	}
+	for _, tc := range ts.Tests {
+		if tc.Error == nil {
+			continue
+		}
+		failedTests = j.addTest(failedTests, tc)
+	}
+	return failedTests
 }
 
 func (j junit2jira) mergeFailedTests(failedTests []testCase) ([]testCase, error) {
@@ -443,7 +451,7 @@ func (j junit2jira) mergeFailedTests(failedTests []testCase) ([]testCase, error)
 	return []testCase{tc}, nil
 }
 
-func (j junit2jira) addFailedTest(failedTests []testCase, tc junit.Test) []testCase {
+func (j junit2jira) addTest(failedTests []testCase, tc junit.Test) []testCase {
 	if !isSubTest(tc) {
 		return append(failedTests, NewTestCase(tc, j.params))
 	}
