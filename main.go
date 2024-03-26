@@ -45,6 +45,7 @@ func main() {
 	flag.StringVar(&p.slackOutput, "slack-output", "", "Generate JSON output in slack format (use dash [-] for stdout)")
 	flag.StringVar(&p.htmlOutput, "html-output", "", "Generate HTML report to this file (use dash [-] for stdout)")
 	flag.StringVar(&p.csvOutput, "csv-output", "", "Convert XML to a CSV file (use dash [-] for stdout)")
+	flag.StringVar(&p.summaryOutput, "summary-output", "", "Write a summary in JSON to this file (use dash [-] for stdout)")
 	flag.StringVar(&jiraUrl, "jira-url", "https://issues.redhat.com/", "Url of JIRA instance")
 	flag.StringVar(&p.jiraProject, "jira-project", "ROX", "The JIRA project for issues")
 	flag.StringVar(&p.junitReportsDir, "junit-reports-dir", os.Getenv("ARTIFACT_DIR"), "Dir that contains jUnit reports XML files")
@@ -85,6 +86,7 @@ type junit2jira struct {
 
 type testIssue struct {
 	issue    *jira.Issue
+	newJIRA  bool
 	testCase testCase
 }
 
@@ -108,22 +110,24 @@ func run(p params) error {
 
 	testSuites, err := junit.IngestDir(p.junitReportsDir)
 	if err != nil {
-		log.Fatalf("coud not read files: %s", err)
+		log.Fatalf("could not read files: %s", err)
 	}
 
 	err = j.createCsv(testSuites)
 	if err != nil {
-		log.Fatalf("coud create CSV: %s", err)
+		log.Fatalf("could not create CSV: %s", err)
 	}
 
 	failedTests, err := j.findFailedTests(testSuites)
 	if err != nil {
 		return errors.Wrap(err, "could not find failed tests")
 	}
+
 	issues, err := j.createIssuesOrComments(failedTests)
 	if err != nil {
 		return errors.Wrap(err, "could not create issues or comments")
 	}
+
 	err = j.createSlackMessage(issues)
 	if err != nil {
 		return errors.Wrap(err, "could not convert to slack")
@@ -138,6 +142,12 @@ func run(p params) error {
 	if err != nil {
 		return errors.Wrap(err, "could not link issues")
 	}
+
+	err = j.writeSummary(issues)
+	if err != nil {
+		return errors.Wrap(err, "could not write summary")
+	}
+
 	return errors.Wrap(j.createHtml(jiraIssues), "could not create HTML report")
 }
 
@@ -297,6 +307,7 @@ func (j junit2jira) createIssueOrComment(tc testCase) (*testIssue, error) {
 		}
 		logEntry(create.Key, summary).Info("Created new issue")
 		issueWithTestCase.issue = create
+		issueWithTestCase.newJIRA = true
 		return &issueWithTestCase, nil
 	}
 
@@ -318,6 +329,49 @@ func (j junit2jira) createIssueOrComment(tc testCase) (*testIssue, error) {
 	}
 	logEntry(issue.Key, summary).Infof("Created comment %s", addComment.ID)
 	return &issueWithTestCase, nil
+}
+
+func (j junit2jira) writeSummary(tc []*testIssue) error {
+	if j.summaryOutput == "" {
+		return nil
+	}
+	out := os.Stdout
+	if j.summaryOutput != "-" {
+		file, err := os.Create(j.summaryOutput)
+		if err != nil {
+			return fmt.Errorf("could not create file %s: %w", j.summaryOutput, err)
+		}
+		out = file
+		defer file.Close()
+	}
+
+	return generateSummary(tc, out)
+}
+
+type summary struct {
+	NewJIRAs int `json:"newJIRAs"`
+}
+
+func generateSummary(tc []*testIssue, output io.Writer) error {
+	newJIRAs := 0
+
+	for _, testIssue := range tc {
+		if testIssue.newJIRA {
+			newJIRAs++
+		}
+	}
+	summary := summary{
+		NewJIRAs: newJIRAs,
+	}
+
+	json, err := json.Marshal(summary)
+	if err != nil {
+		return err
+	}
+
+	_, err = output.Write(json)
+
+	return err
 }
 
 func logEntry(id, summary string) *log.Entry {
@@ -546,6 +600,7 @@ type params struct {
 	csvOutput       string
 	htmlOutput      string
 	slackOutput     string
+	summaryOutput   string
 }
 
 func NewTestCase(tc junit.Test, p params) testCase {
