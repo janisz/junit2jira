@@ -290,13 +290,18 @@ func (j junit2jira) createIssueOrComment(tc testCase) (*testIssue, error) {
 			logEntry(NA, summary).Debugf("Dry run: will just print issue\n %q", description)
 			return nil, nil
 		}
-		create, response, err := j.jiraClient.Issue.Create(newIssue(j.jiraProject, summary, description))
+		issue = newIssue(j.jiraProject, summary, description)
+		create, response, err := j.jiraClient.Issue.Create(issue)
 		if response != nil && err != nil {
 			logError(err, response)
 			return nil, fmt.Errorf("could not create issue %s: %w", summary, err)
 		}
-		logEntry(create.Key, summary).Info("Created new issue")
-		issueWithTestCase.issue = create
+		// Response from API does not contain full object so we need to copy missing data
+		issue.Key = create.Key
+		issue.ID = create.ID
+		issue.Self = create.Self
+		logEntry(issue.Key, summary).Info("Created new issue")
+		issueWithTestCase.issue = issue
 		return &issueWithTestCase, nil
 	}
 
