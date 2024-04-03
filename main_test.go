@@ -3,12 +3,13 @@ package main
 import (
 	"bytes"
 	_ "embed"
+	"net/url"
+	"testing"
+
 	"github.com/andygrunwald/go-jira"
 	"github.com/joshdk/go-junit"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"net/url"
-	"testing"
 )
 
 func TestParseJunitReport(t *testing.T) {
@@ -74,6 +75,7 @@ github.com/stackrox/rox/sensor/kubernetes/localscanner / TestLocalScannerTLSIssu
 			[]testCase{
 				{
 					Message: `DefaultPoliciesTest / Verify policy Apache Struts  CVE-2017-5638 is triggered FAILED
+central-basic / step 90-activate-scanner-v4 FAILED
 github.com/stackrox/rox/pkg/booleanpolicy/evaluator / TestDifferentBaseTypes FAILED
 github.com/stackrox/rox/sensor/kubernetes/localscanner / TestLocalScannerTLSIssuerIntegrationTests FAILED
 github.com/stackrox/rox/central/resourcecollection/datastore/store/postgres / TestCollectionsStore FAILED
@@ -159,6 +161,13 @@ command-line-arguments / TestTimeout FAILED
 					Suite:   "command-line-arguments",
 					Message: "No test result found",
 					Error:   "panic: test timed out after 1ns\n\ngoroutine 7 [running]:\ntesting.(*M).startAlarm.func1()\n\t/snap/go/10030/src/testing/testing.go:2036 +0x8e\ncreated by time.goFunc\n\t/snap/go/10030/src/time/sleep.go:176 +0x32\n\ngoroutine 1 [chan receive]:\ntesting.(*T).Run(0xc0000076c0, {0x5254af?, 0x4b7c05?}, 0x52f280)\n\t/snap/go/10030/src/testing/testing.go:1494 +0x37a\ntesting.runTests.func1(0xc00007e390?)\n\t/snap/go/10030/src/testing/testing.go:1846 +0x6e\ntesting.tRunner(0xc0000076c0, 0xc000104cd8)\n\t/snap/go/10030/src/testing/testing.go:1446 +0x10b\ntesting.runTests(0xc000000140?, {0x5fde10, 0x1, 0x1}, {0x7f398ed8a108?, 0x40?, 0x606c20?})\n\t/snap/go/10030/src/testing/testing.go:1844 +0x456\ntesting.(*M).Run(0xc000000140)\n\t/snap/go/10030/src/testing/testing.go:1726 +0x5d9\nmain.main()\n\t_testmain.go:47 +0x1aa\n\ngoroutine 6 [runnable]:\ntesting.pcToName(0x4b7dd4)\n\t/snap/go/10030/src/testing/testing.go:1226 +0x3d\ntesting.callerName(0x0?)\n\t/snap/go/10030/src/testing/testing.go:1222 +0x45\ntesting.tRunner(0xc000007860, 0x52f280)\n\t/snap/go/10030/src/testing/testing.go:1307 +0x34\ncreated by testing.(*T).Run\n\t/snap/go/10030/src/testing/testing.go:1493 +0x35f",
+					BuildId: "1",
+				},
+				{
+					Name:    "step 90-activate-scanner-v4",
+					Suite:   "central-basic",
+					Message: "failed in step 90-activate-scanner-v4",
+					Error:   "resource PersistentVolumeClaim:kuttl-test-apparent-gelding/scanner-v4-db: .spec.accessModes: value mismatch, expected: ReadWriteOncex != actual: ReadWriteOnce",
 					BuildId: "1",
 				},
 			},
@@ -354,4 +363,36 @@ func TestHtmlOutput(t *testing.T) {
 	require.NoError(t, j.renderHtml(issues, buf))
 
 	assert.Equal(t, expectedHtmlOutput, buf.String())
+}
+
+func TestSummaryNoNewJIRAs(t *testing.T) {
+	expectedSummaryNoNewJIRAs := `{"newJIRAs":0}`
+	buf := bytes.NewBufferString("")
+	require.NoError(t, generateSummary(nil, buf))
+	assert.Equal(t, expectedSummaryNoNewJIRAs, buf.String())
+}
+
+func TestSummaryNoFailures(t *testing.T) {
+	expectedSummarySomeNewJIRAs := `{"newJIRAs":2}`
+	tc := []*testIssue{
+		{
+			issue:    &jira.Issue{Key: "ROX-1"},
+			newJIRA:  false,
+			testCase: testCase{},
+		},
+		{
+			issue:    &jira.Issue{Key: "ROX-2"},
+			newJIRA:  true,
+			testCase: testCase{},
+		},
+		{
+			issue:    &jira.Issue{Key: "ROX-3"},
+			newJIRA:  true,
+			testCase: testCase{},
+		},
+	}
+
+	buf := bytes.NewBufferString("")
+	require.NoError(t, generateSummary(tc, buf))
+	assert.Equal(t, expectedSummarySomeNewJIRAs, buf.String())
 }
